@@ -1,0 +1,151 @@
+.main_div {
+  display: flex;
+  flex-direction: row;
+}
+.first_section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+  height: 100vh;
+  /* background-color: red; */
+  /* padding-top: 200px;
+  padding-bottom: 200px; */
+}
+.main_heading {
+  font-size: 31px; /*5 points less */
+  font-family: "IBM Plex Serif", serif;
+  font-weight: 400;
+}
+.upload_section {
+  margin-top: -10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 420px;
+  height: 170px;
+  border-radius: 12px;
+  border: 2px dashed #cdc8c0;
+  background: rgba(242, 242, 242, 0.6);
+  /* background-color: red; */
+}
+.upload_section button {
+  margin-top: 35px;
+  margin-bottom: -7px;
+  display: inline-flex;
+  padding: 7px 75px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 7px;
+  background: black;
+  color: white;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+}
+.drag_and_drop {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+}
+.pdf_format_only {
+  color: #393939;
+  font-family: IBM Plex Sans;
+  font-size: 12px;
+  font-style: italic;
+  font-weight: 400;
+}
+.second_section {
+  background: var(--aibg-1, rgba(196, 248, 183, 0.3));
+  width: 50%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.filters_box {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  position: absolute;
+  width: 73px;
+  height: 27px;
+  background-color: white;
+  border-radius: 5px;
+  border: 1px solid #dfdfdf;
+  background: var(--pdfbg, #fffcfc);
+  position: absolute;
+  top: 15px;
+  right: 15px;
+}
+.second_section_text {
+  /* background-color: red; */
+  text-align: center;
+  margin-top: -60px;
+  font-family: IBM Plex Sans;
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 1.8;
+}
+
+@media (max-width: 768px) {
+  .main_div {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100%;
+  }
+  .first_section {
+    width: 100%;
+    height: 50%;
+  }
+  .second_section {
+    width: 100%;
+    height: 50%;
+  }
+  .main_heading {
+    font-size: 25px; /*5 points less */
+    font-weight: 500;
+    text-align: center;
+    margin-bottom: -40px;
+    margin-top: 25px;
+  }
+  .upload_section {
+    width: 100%;
+    background: none;
+    border: none;
+  }
+  .upload_section button {
+    border-radius: 7px;
+    background: black;
+    font-size: 16px;
+    font-weight: 400;
+    margin-top: -6px;
+  }
+  .drag_and_drop {
+    font-family: "IBM Plex Sans", sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    display: none;
+  }
+  .pdf_format_only {
+    margin-top: -30px;
+    font-size: 12px;
+    font-weight: 400;
+    text-align: center;
+  }
+
+  .second_section_text {
+    /* background-color: red; */
+    width: 90%;
+    margin-top: 0px;
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 1.5;
+  }
+}
