@@ -1,0 +1,21 @@
+.typewriter-effect {
+  white-space: pre-wrap; /* Allow text to wrap to the next line */
+}
+
+.typewriter-effect span {
+  display: block; /* Change from inline-block to block */
+  animation: typing 0.08s steps(1, end) forwards;
+  white-space: pre-wrap; /* Allow text to wrap to the next line */
+  overflow: hidden;
+  border-right: 2px solid;
+  padding-right: 2px;
+}
+
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}

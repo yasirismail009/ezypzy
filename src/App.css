@@ -36,3 +36,42 @@
     transform: rotate(360deg);
   }
 }
+
+/* Hide the scroll bar */
+body {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  overflow: hidden;
+}
+
+/* Hide the scroll bar for WebKit-based browsers */
+body::-webkit-scrollbar {
+  width: 0em;
+}
+
+body::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
+.App{
+  scrollbar-width: none !important; /* Firefox */
+  -ms-overflow-style: none !important; 
+}
+.PdfHighlighter{
+  overflow: scroll !important;
+}
+.PdfHighlighter::-webkit-scrollbar {
+  width: 0em !important;
+}
+
+.PdfHighlighter::-webkit-scrollbar-track {
+  background-color: transparent !important;
+}
+
+.PdfHighlighter::-webkit-scrollbar-thumb {
+  background-color: transparent !important;
+}
