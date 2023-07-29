@@ -16,11 +16,17 @@
 import draw from "../../assets/pen-swirl.png";
 import tracker from "../../assets/rectangle-vertical-history.png";
 import character from "../../assets/ezpz.png";
-  
-  
-  import styles from "../pdfUploaded/PDFUploaded.module.css";
-  import mobilestyles from "../pdfMobile/PDFMobile.module.css";
-  
+import styles from "../pdfUploaded/PDFUploaded.module.css";
+import mobilestyles from "../pdfMobile/PDFMobile.module.css";
+import MermaidDiagram from "../pdfUploaded/Mermaid";
+import Typist from "react-typist";
+import { MdArrowDropDown, MdArrowDropUp } from "react-icons/md";
+import {CiMenuKebab} from 'react-icons/ci'
+import DrawerData from './Drawer';
+
+const options = [
+  'None',
+  'Atria',]
   
   
   const getNextId = () => String(Math.random()).slice(2);
@@ -62,16 +68,25 @@ const HighlightPopup = ({
       showSummary:false,
       anchorEl:null,
       bottom: false,
+      bottom2: false,
       fontScale:0.8,
       highlighterKey:Date.now(),
       isSmallScreen: window.innerWidth <= 768,
       showTeachText: false,
       showDiagramText: false,
       showTrackerText: false,
+      anchorEl2:null,
     };
   }
   
   toggleDrawer1 = (anchor, open) => (event) => {
+    console.log(anchor, open)
+    if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+      return;
+    }
+    this.setState({ ...this.state, [anchor]: open });
+  };
+  toggleDrawer2 = (anchor, open) => (event) => {
     if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
     }
@@ -202,6 +217,15 @@ const HighlightPopup = ({
         highlighterKey:Date.now()
       }));
     };
+    handleClick = (event) => {
+      this.setState({ anchorEl2: event.currentTarget });
+    };
+  
+    handleClose = () => {
+      this.setState({ anchorEl2: null });
+    };
+
+
     updateHighlight(highlightId, position, content) {
       console.log("Updating highlight", highlightId, position, content);
   
@@ -227,8 +251,10 @@ const HighlightPopup = ({
   
     render() {
       const { url, highlights,showSummary, fontScale, highlighterKey,
-        pdfHighlighterRef,anchorEl,isSmallScreen,showTeachText, showDiagramText, showTrackerText } = this.state;
-  
+        pdfHighlighterRef,anchorEl,isSmallScreen,showTeachText, showDiagramText, showTrackerText, bottom } = this.state;
+      const {Thread,lines,dropDownData,showDropDown, setShowDropDown, messageContainerRef,
+      paragraphRef,
+      handleTypingDone,}= this.props
       return (
         <>
         {isSmallScreen? (<div className={mobilestyles.main_div}>
@@ -265,11 +291,11 @@ const HighlightPopup = ({
             <img src={teach} />
             <p>Teach</p>
           </div>
-          <div className={mobilestyles.draw_icon}>
+          <div className={mobilestyles.draw_icon} onClick={this.toggleDrawer1("bottom", true)}>
             <img src={draw} />
             <p>Draw</p>
           </div>
-          <div className={mobilestyles.tracker_icon} onClick={this.handleMenuOpen}>
+          <div className={mobilestyles.tracker_icon} onClick={this.toggleDrawer2("bottom2", true)}>
             <img src={tracker} />
             <p>Tracker</p>
           </div>
@@ -532,15 +558,100 @@ const HighlightPopup = ({
      
       {/* Add more menu items as needed */}
     </Menu>
-    <SwipeableDrawer
-    sx={{height:"80vh", zIndex:9999999}}
+    <DrawerData toggleDrawer1={this.toggleDrawer1} bottom={bottom}/>
+    {/* <SwipeableDrawer
+    sx={{maxHeight:"100vh", zIndex:9999999}}
               anchor={"bottom"}
               open={this.state["bottom"]}
               onClose={this.toggleDrawer1("bottom", false)}
               onOpen={this.toggleDrawer1("bottom", true)}
             >
-              <p>Texting</p>
+             <div className={mobilestyles.second_section}>
+              <div className={mobilestyles.second_section_text}>
+              <div className={mobilestyles.menuIcon}>
+             < CiMenuKebab/>
+             </div> */}
+            {/* <div ref={messageContainerRef} className={mobilestyles.scrollView}>
+            {Thread.map((data, index)=>(
+              <div className={mobilestyles.childDiv} key={index}>
+                <div>
+              <p>Q {index+1}: <b>{data?.title}</b></p>
+              {data?.diagram?<div className={mobilestyles.mermaidData}><MermaidDiagram diagramDefinition={data.diagram} /></div>:null}
+              <p>{data?.aires}</p>
+              </div>
+             </div>
+            ))}
+          </div> */}
+          {/* <div>
+            <div className={mobilestyles.childDiv}>
+            <div className={mobilestyles.fade_in_paragraph} ref={paragraphRef}>
+              <span className={mobilestyles.fade_in_line}>
+                <Typist
+                  avgTypingDelay={50}
+                  cursor={{ hideWhenDone: true }}
+                  onTypingDone={handleTypingDone}
+                >
+                  {lines}
+                </Typist>
+                <br />
+              </span>
+            </div>
+            <input
+              placeholder="Type here to ask"
+              type="text"
+              className={mobilestyles.inputAi}
+            ></input>
+            <div
+              style={{
+                width: "100%",
+                textAlign: "start",
+                display: "flex",
+                alignItems: "center",
+                zIndex: 3,
+              }}
+              onClick={(e) => {
+                setShowDropDown(!showDropDown);
+              }}
+            >
+              <span className={mobilestyles.dropDown}>
+                Questions you may want to ask{" "}
+              </span>
+              <span>
+                {showDropDown ? (
+                  <MdArrowDropUp style={{ fontSize: "20px", margin: 0 }} />
+                ) : (
+                  <MdArrowDropDown style={{ fontSize: "20px", margin: 0 }} />
+                )}
+              </span>
+            </div>
+            {showDropDown ? (
+              <div>
+                {dropDownData.map((val, key) => (
+                  <p key={key} className={mobilestyles.dropdownItem}>
+                    {val}
+                  </p>
+                ))}
+              </div>
+            ) : null}
+            </div>
+            </div>
+           
+          </div>
+            </div>
+            </SwipeableDrawer> */}
+
+            <SwipeableDrawer
+    sx={{maxHeight:"100vh", zIndex:9999999}}
+              anchor={"bottom2"}
+              open={this.state["bottom2"]}
+              onClose={this.toggleDrawer2("bottom2", false)}
+              onOpen={this.toggleDrawer2("bottom2", true)}
+            >
+      {highlights.map((val, key)=>(
+       <p key={key} className={styles.menu_item_custom}  onClick={() => this.updateHash(val)} >{val.content.text.length > 15 ? val.content.text.slice(0, 15) + '...' : val.content.text}</p>
+      ))}
             </SwipeableDrawer>
+      
       </>
       );
     }

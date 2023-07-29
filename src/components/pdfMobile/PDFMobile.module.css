@@ -116,7 +116,7 @@
 }
 .bottomMenu {
   position: absolute;
-  z-index: 99999;
+  z-index: 999;
   bottom: 7%;
   width: 100%;
   
@@ -179,4 +179,125 @@
   z-index: 1;
   backdrop-filter: blur(100px);
 
+}
+.second_section {
+  padding: 10px;
+  position: relative;
+  overflow: scroll;
+  height: 100vh;
+  padding: 30px;
+  /* background-color: red; */
+}
+.second_section_text {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  text-align: start;
+  font-family: "IBM Plex Sans", sans;
+  font-size: 23px;
+  line-height: 1.7;
+  padding: 14px 14px;
+  /* background-color: red; */
+}
+.second_section p {
+  margin-top: 18px;
+}
+.fade_in_paragraph {
+  opacity: 0;
+  animation: fadeIn 10s ease-in-out forwards;
+}
+
+.fade_in_line {
+  opacity: 1;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+.menu_item_custom {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px; /* Change this value as needed to control the width before truncation */
+  font-family: IBM Plex Sans;
+font-size: 14px !important;
+font-style: normal;
+font-weight: 400;
+line-height: 25px; /* 178.571% */
+}
+.inputAi{
+width: 100%; 
+color: #ACACAC; margin-bottom: 10px; font-size: 14px; font-family: IBM Plex Serif; font-weight: 400; line-height: 27px; word-wrap: break-word;
+  z-index: 1;
+  border: none;
+}
+.inputAi:hover {
+  border:none; /* Replace this with the desired hover border color */
+}
+
+/* Change placeholder color on hover */
+.custom-input:hover::placeholder {
+  color: #ACACAC; /* Replace this with the desired hover placeholder color */
+}
+.dropDown{
+  color: black; font-size: 22px; font-family: IBM Plex Serif; font-weight: 600; line-height: 27px; word-wrap: break-word
+}
+.dropDownIcon{
+ color: black; font-size: 20px; font-family: Font Awesome 6 Pro; font-weight: 400; line-height: 27px; word-wrap: break-word;
+ margin-right: 10px;
+}
+
+.dropdownItem{
+  background-color: rgba(0, 0, 0, 0.03);
+  color: #000;
+font-family: IBM Plex Serif;
+font-size: 20px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+text-align: start;
+padding: 2PX 4PX;
+}
+.scrollView{
+  z-index: 1;
+  overflow: scroll;
+  height: 100vh;
+}
+.scrollView::-webkit-scrollbar {
+  width: 0em !important;
+}
+
+.scrollView::-webkit-scrollbar-track {
+  background-color: transparent !important;
+}
+
+.scrollView::-webkit-scrollbar-thumb {
+  background-color: transparent !important;
+}
+.childDiv{
+  height: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.mermaidData{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.dot{
+  width: 20px;
+  height: 20px;
+  border-radius: 100px;
+}
+.menuIcon{
+  display: flex;
+  justify-content: end;
+  width: 100%;
+  padding: 10px 4px;
 }

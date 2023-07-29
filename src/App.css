@@ -41,7 +41,8 @@
 body {
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* Internet Explorer 10+ */
-  overflow: hidden;
+  margin: 0;
+  padding: 0;
 }
 
 /* Hide the scroll bar for WebKit-based browsers */

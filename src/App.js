@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import UploadFile from './components/uploadFile/UploadFile';
 import ViewPdf from './components/pdfUploaded/PDFUploaded';
 import { useRef, useState } from 'react';
+import Index from './components/LandingPage/Index';
 
 
 function App() {
@@ -67,7 +68,7 @@ function App() {
    <>
     <Router>
       <Routes>
-        <Route exact path="/" element={<UploadFile handleFileUpload={handleFileUpload} handleUpload={handleUpload} fileInputRef={fileInputRef} selectedPdf={selectedPdf}/> } />
+        <Route exact path="/" element={<Index/> } />
         <Route exact path="/uploadFile" element={<UploadFile handleFileUpload={handleFileUpload} handleUpload={handleUpload} fileInputRef={fileInputRef} selectedPdf={selectedPdf}/>} />
         <Route path="/viewPdf" element={<ViewPdf selectedPdf={selectedPdf}/>} />
       </Routes>

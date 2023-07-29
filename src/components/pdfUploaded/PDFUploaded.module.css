@@ -252,7 +252,7 @@
   width: 150px;
 }
 .second_section_text {
-  width: 500px;
+  padding: 0 40px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -293,9 +293,10 @@ font-weight: 400;
 line-height: 25px; /* 178.571% */
 }
 .inputAi{
-  width: 488px; color: #ACACAC; font-size: 14px; font-family: IBM Plex Serif; font-weight: 400; line-height: 27px; word-wrap: break-word;
+  width: 98%; color: #ACACAC; font-size: 14px; font-family: IBM Plex Serif; font-weight: 400; line-height: 27px; word-wrap: break-word;
   z-index: 1;
   border: none;
+  margin-bottom: 10px;
 }
 .inputAi:hover {
   border:none; /* Replace this with the desired hover border color */
@@ -327,7 +328,7 @@ padding: 2PX 4PX;
 .scrollView{
   z-index: 1;
   overflow: scroll;
-  height: 70vh;
+  height: 83vh;
 }
 .scrollView::-webkit-scrollbar {
   width: 0em !important;
@@ -341,7 +342,7 @@ padding: 2PX 4PX;
   background-color: transparent !important;
 }
 .childDiv{
-  height: 90%;
+  height: 70%;
   display: flex;
   flex-direction: column;
   justify-content: center;

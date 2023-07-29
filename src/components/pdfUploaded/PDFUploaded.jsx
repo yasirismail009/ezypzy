@@ -10,10 +10,13 @@ import { MdArrowDropDown, MdArrowDropUp } from "react-icons/md";
 import MermaidDiagram from './Mermaid';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import { Reveal } from "react-reveal";
+import { useScrollDirection } from 'react-use-scroll-direction'
 
 
 const PDFUploaded = () => {
   const paragraphRef = useRef(null);
+  const messageContainerRef = useRef(null);
   const [lines, setLines] = useState(
     "Consider each highlight a secret handshake between us - a sign from me to step in and lend a hand. But remember, there's no rush, we're here to enjoy the journey as much as the destination.  So take a deepbreath and when you're ready, let's jump in and make learning fun!"
   );
@@ -52,6 +55,7 @@ const PDFUploaded = () => {
     
   const [currentLineIndex, setCurrentLineIndex] = useState(0);
   const [showDropDown, setShowDropDown] = useState(false);
+  const [zoomOutLevel, setZoomOutLevel] = useState(0);
   const [bgColor, setBgColor] = useState("var(--aibg-1, rgba(196, 248, 183, 0.30))");
   const [dropDownData, setDropDownData] = useState([
     "Lorem Ipsum is simply dummy text of the printingLorem Ipsum is simply dummy text of the printingLorem Ipsum is simply?",
@@ -89,11 +93,12 @@ const PDFUploaded = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-  const messageContainerRef = useRef(null);
+
 
   const scrollToBottom = () => {
     if (messageContainerRef.current) {
       const { scrollHeight, clientHeight } = messageContainerRef.current;
+      setZoomOutLevel(messageContainerRef.current.scrollTop)
       messageContainerRef.current.scrollTop = scrollHeight - clientHeight;
     }
   };
@@ -109,32 +114,63 @@ const handleClick = (event) => {
 const handleClose = () => {
   setAnchorEl(null);
 };
-const [scrollDirection, setScrollDirection] = useState("");
+const [isCentered, setIsCentered] = useState(false);
+const [scrollScale, setScrollScale] = useState(1);
+const [opacityScale, setOpacityScale] = useState(1);
+const [textAlign, setTextAlign] = useState("start");
 
-const handleScroll = () => {
-  const currentScrollY = window.scrollY;
+  useEffect(() => {
+    // Function to check if the child is in the center of the parent
+    const checkCentered = () => {
+      // ... (same as the previous example)
+    };
 
-  if (currentScrollY > scrollYRef.current) {
-    console.log("down")
-    setScrollDirection("Scroll Down");
-  } else {
-    setScrollDirection("Scroll Up");
-    console.log("up")
+    // Attach the event listener to check for centering when the window is resized
+    window.addEventListener('resize', checkCentered);
+
+    // Initial check on mount
+    checkCentered();
+
+    // Clean up the event listener on unmount
+    return () => {
+      window.removeEventListener('resize', checkCentered);
+    };
+  }, []);
+
+
+  useEffect(() => {
+    if (currentLineIndex === lines.length - 1) {
+      paragraphRef.current.style.opacity = 1;
+    }
+  }, [currentLineIndex, lines.length]);
+ 
+  // const scrollTargetRef = useRef(null);
+  var fullHeight=0;
+  setTimeout(()=>{
+  fullHeight = messageContainerRef.current.scrollTop - 150;},1000) // Check if messageContainerRef is not null
+
+  const handleScroll = () => {
+  if (messageContainerRef.current) {
+    console.log(messageContainerRef.current.scrollTop);
+    const newScale = messageContainerRef.current.scrollTop < fullHeight ? 0.8 : 1;
+    const opacity = messageContainerRef.current.scrollTop < fullHeight ? 0.6 : 1;
+    const alignItem = messageContainerRef.current.scrollTop < fullHeight ? "end" : "start";
+
+    // Update the scroll scale state
+    setScrollScale(newScale);
+    setOpacityScale(opacity);
+    setTextAlign(alignItem);
   }
-
-  scrollYRef.current = currentScrollY;
 };
+  useEffect(() => {
+    // Add the scroll event listener when the component mounts
+    messageContainerRef.current.addEventListener('scroll', handleScroll);
 
-const scrollYRef = React.useRef(0);
-
-useEffect(() => {
-  window.addEventListener("scroll", handleScroll);
-
-  return () => {
-    window.removeEventListener("scroll", handleScroll);
-  };
-}, []);
-
+    // Remove the scroll event listener when the component unmounts
+    return () => {
+      messageContainerRef.current.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
   return (
     <div className={styles.main_div}>
       <div
@@ -142,10 +178,19 @@ useEffect(() => {
           isSmallScreen ? styles.first_section_small : styles.first_section
         }
       >
-        <PDFsection />
+        <PDFsection Thread={Thread} 
+        lines={lines} 
+        dropDownData={dropDownData} 
+        showDropDown={showDropDown} 
+        setShowDropDown={setShowDropDown}
+        messageContainerRef={messageContainerRef}
+        paragraphRef={paragraphRef}
+        handleTypingDone={handleTypingDone}
+        />
       </div>
       {isSmallScreen ? null : (
         <>
+        <Reveal effect="fadeIn">
         <div className={styles.second_section} style={{background:bgColor}}>
           <div className={styles.filters_box}>
             {/* <BsRecordCircle size={15} /> */}
@@ -165,21 +210,23 @@ useEffect(() => {
       </Menu>
           </div>
           <div className={styles.second_section_text}>
-            <div ref={messageContainerRef} className={styles.scrollView}>
+
+            <div ref={messageContainerRef}  className={styles.scrollView}  style={{ transform: `scale(${scrollScale})`, transition: 'transform 0.5s',opacity: opacityScale, transition: 'transform 0.2s, opacity 0.2s' }}>
             {Thread.map((data, index)=>(
               <div className={styles.childDiv} key={index}>
                 <div>
-              <p>Q {index+1}: <b>{data?.title}</b></p>
+              <p style={{textAlign:`${textAlign}`}}>{index+1}: <b>{data?.title}</b></p>
               {data?.diagram?<div className={styles.mermaidData}><MermaidDiagram diagramDefinition={data.diagram} /></div>:null}
               <p>{data?.aires}</p>
               </div>
              </div>
             ))}
-             <div>
-            </div>
+             
+            
             <div className={styles.childDiv}>
             <div className={styles.fade_in_paragraph} ref={paragraphRef}>
               <span className={styles.fade_in_line}>
+              <Reveal effect="fadeIn">
                 <Typist
                   avgTypingDelay={50}
                   cursor={{ hideWhenDone: true }}
@@ -187,6 +234,7 @@ useEffect(() => {
                 >
                   {lines}
                 </Typist>
+                </Reveal>
                 <br />
               </span>
             </div>
@@ -233,6 +281,7 @@ useEffect(() => {
            
           </div>
         </div>
+        </Reveal>
           <div className={styles.character_img}>
             <EyesCom />
           </div></>
