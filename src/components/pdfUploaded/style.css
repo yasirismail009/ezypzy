@@ -46,7 +46,7 @@ right: 0;
   display: flex;
 }
 .right {
-  width: 100vh;
+  width: 80vh;
   height: 100vw;
   position: relative;
   display: flex;
@@ -55,7 +55,6 @@ right: 0;
 }
 .img{
   position: relative;
-  margin: -8px -4px;
 }
 .image{
   width: 170px;

@@ -50,7 +50,7 @@ const HighlightPopup = ({
 
 
   
-  const PRIMARY_PDF_URL = "https://arxiv.org/pdf/1708.08021.pdf";
+  const PRIMARY_PDF_URL = "https://pdfezypzy.s3.amazonaws.com/media/documents/Document_Service.pdf";
   const SECONDARY_PDF_URL = "https://arxiv.org/pdf/1604.02480.pdf";
   
   const searchParams = new URLSearchParams(document.location.search);
@@ -69,16 +69,16 @@ const HighlightPopup = ({
       anchorEl:null,
       bottom: false,
       bottom2: false,
-      fontScale:0.8,
+      fontScale:0.1,
       highlighterKey:Date.now(),
-      isSmallScreen: window.innerWidth <= 768,
       showTeachText: false,
       showDiagramText: false,
       showTrackerText: false,
       anchorEl2:null,
     };
   }
-  
+
+
   toggleDrawer1 = (anchor, open) => (event) => {
     console.log(anchor, open)
     if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -114,22 +114,8 @@ const HighlightPopup = ({
   handleMouseLeaveTracker = () => {
     this.setState({ showTrackerText: false });
   };
-  handleResize() {
-    this.setState({ isSmallScreen: window.innerWidth <= 768 , fontScale: 0.8149845435488103 , highlighterKey:Date.now()}); // Adjust the width threshold as needed
-  }
 
-  componentDidMount() {
-    // Initial check
-    this.handleResize();
 
-    // Event listener for window resize
-    window.addEventListener('resize', this.handleResize);
-  }
-
-  componentWillUnmount() {
-    // Cleanup the event listener when the component is unmounted
-    window.removeEventListener('resize', this.handleResize);
-  }
     componentDidUpdate(prevProps, prevState) {
       // Log the state after a state or prop update
       console.log('Current state after update:', this.state.highlights);
@@ -251,15 +237,15 @@ const HighlightPopup = ({
   
     render() {
       const { url, highlights,showSummary, fontScale, highlighterKey,
-        pdfHighlighterRef,anchorEl,isSmallScreen,showTeachText, showDiagramText, showTrackerText, bottom } = this.state;
+        pdfHighlighterRef,anchorEl,showTeachText, showDiagramText, showTrackerText, bottom } = this.state;
       const {Thread,lines,dropDownData,showDropDown, setShowDropDown, messageContainerRef,
       paragraphRef,
-      handleTypingDone,}= this.props
+      handleTypingDone,fileData,isSmallScreen}= this.props
       return (
         <>
         {isSmallScreen? (<div className={mobilestyles.main_div}>
       <div className={mobilestyles.header}>
-        <p className={mobilestyles.heading}>Diversity13812.</p>
+        <p className={mobilestyles.heading}>{fileData?.fileName}</p>
         <div className={mobilestyles.summary_edit_section}>
           <button  onClick={this.handleToggleSummary}>Summary</button>
           <div className={mobilestyles.edit_section}>
@@ -312,7 +298,7 @@ const HighlightPopup = ({
            position: "relative",
          }}
        >
-      <PdfLoader url={url} ref={pdfHighlighterRef} key={highlighterKey}>
+      <PdfLoader url={fileData?.file} ref={pdfHighlighterRef} key={highlighterKey}>
   {(pdfDocument) => (
     <PdfHighlighter
       pdfDocument={pdfDocument}
@@ -389,7 +375,7 @@ const HighlightPopup = ({
    (   <div>
       <div className={styles.header}>
         <div className={styles.heading_section}>
-          <p>Diversity13812.</p>
+          <p>{fileData?.fileName.length > 15 ? fileData?.fileName.slice(0, 15) + '...' :fileData?.fileName}</p>
           <button style={{marginRight:"4px", cursor:"pointer"}} onClick={this.handleToggleSummary}>Summary</button>
         </div>
         <div className={styles.edit_section}>
@@ -461,7 +447,7 @@ const HighlightPopup = ({
            position: "relative",
          }}
        >
-      <PdfLoader url={url} ref={pdfHighlighterRef} key={highlighterKey}>
+      <PdfLoader url={fileData?.file} ref={pdfHighlighterRef} key={highlighterKey}>
   {(pdfDocument) => (
     <PdfHighlighter
       pdfDocument={pdfDocument}
@@ -559,87 +545,7 @@ const HighlightPopup = ({
       {/* Add more menu items as needed */}
     </Menu>
     <DrawerData toggleDrawer1={this.toggleDrawer1} bottom={bottom}/>
-    {/* <SwipeableDrawer
-    sx={{maxHeight:"100vh", zIndex:9999999}}
-              anchor={"bottom"}
-              open={this.state["bottom"]}
-              onClose={this.toggleDrawer1("bottom", false)}
-              onOpen={this.toggleDrawer1("bottom", true)}
-            >
-             <div className={mobilestyles.second_section}>
-              <div className={mobilestyles.second_section_text}>
-              <div className={mobilestyles.menuIcon}>
-             < CiMenuKebab/>
-             </div> */}
-            {/* <div ref={messageContainerRef} className={mobilestyles.scrollView}>
-            {Thread.map((data, index)=>(
-              <div className={mobilestyles.childDiv} key={index}>
-                <div>
-              <p>Q {index+1}: <b>{data?.title}</b></p>
-              {data?.diagram?<div className={mobilestyles.mermaidData}><MermaidDiagram diagramDefinition={data.diagram} /></div>:null}
-              <p>{data?.aires}</p>
-              </div>
-             </div>
-            ))}
-          </div> */}
-          {/* <div>
-            <div className={mobilestyles.childDiv}>
-            <div className={mobilestyles.fade_in_paragraph} ref={paragraphRef}>
-              <span className={mobilestyles.fade_in_line}>
-                <Typist
-                  avgTypingDelay={50}
-                  cursor={{ hideWhenDone: true }}
-                  onTypingDone={handleTypingDone}
-                >
-                  {lines}
-                </Typist>
-                <br />
-              </span>
-            </div>
-            <input
-              placeholder="Type here to ask"
-              type="text"
-              className={mobilestyles.inputAi}
-            ></input>
-            <div
-              style={{
-                width: "100%",
-                textAlign: "start",
-                display: "flex",
-                alignItems: "center",
-                zIndex: 3,
-              }}
-              onClick={(e) => {
-                setShowDropDown(!showDropDown);
-              }}
-            >
-              <span className={mobilestyles.dropDown}>
-                Questions you may want to ask{" "}
-              </span>
-              <span>
-                {showDropDown ? (
-                  <MdArrowDropUp style={{ fontSize: "20px", margin: 0 }} />
-                ) : (
-                  <MdArrowDropDown style={{ fontSize: "20px", margin: 0 }} />
-                )}
-              </span>
-            </div>
-            {showDropDown ? (
-              <div>
-                {dropDownData.map((val, key) => (
-                  <p key={key} className={mobilestyles.dropdownItem}>
-                    {val}
-                  </p>
-                ))}
-              </div>
-            ) : null}
-            </div>
-            </div>
-           
-          </div>
-            </div>
-            </SwipeableDrawer> */}
-
+  
             <SwipeableDrawer
     sx={{maxHeight:"100vh", zIndex:9999999}}
               anchor={"bottom2"}

@@ -92,6 +92,9 @@
   font-weight: 400;
   line-height: 1.8;
 }
+.story_gif{
+  width: 50%;
+}
 
 @media (max-width: 768px) {
   .main_div {

@@ -1,17 +1,49 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { BsRecordCircle } from "react-icons/bs";
 import { AiOutlineFormatPainter } from "react-icons/ai";
 import styles from "./UploadFile.module.css";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import myGif from '../../assets/EzpZ-Fire.gif'
 
-const UploadFile = ({handleFileUpload, handleUpload, fileInputRef,selectedPdf}) => {
-  const navigate= useNavigate()
-  useEffect(()=>{
-    console.log(selectedPdf)
-    if(selectedPdf !=null){
-      navigate('/viewPdf')
+const UploadFile = () => {
+ const navigate = useNavigate()
+  const fileInputRef = useRef(null);
+
+  const handleUpload = () => {
+    fileInputRef.current.click();
+  };
+
+
+
+  const handleFileUpload = async (event) => {
+    const file = event.target.files[0];
+    console.log(file)
+    const fileExtension = file.name.split(".").pop().toLowerCase();
+
+    const supportedFormats = ["doc", "docx", "pptx", "ppt", "pdf"];
+    if (!supportedFormats.includes(fileExtension)) {
+      alert(
+        "Unsupported file format. Please upload a doc, docx, ppt, pptx, or pdf file."
+      );
+      return;
+    } else{
+      uploadFile(file)
     }
-      },[selectedPdf, navigate])
+
+  
+  };
+  const uploadFile =(file)=>{
+    const formData=  new FormData();
+    formData.append("fileUpload",file)
+    axios.post("http://192.168.100.2:8001/ezypzy/file_save/",formData).then((res)=>{
+      localStorage.setItem("file",JSON.stringify(res.data.result))
+      navigate('/viewPdf')
+    }).catch((err)=>{
+      console.log(err)
+    })
+  }
+
   return (
     <div className={styles.main_div}>
       <div className={styles.first_section}>
@@ -43,6 +75,7 @@ const UploadFile = ({handleFileUpload, handleUpload, fileInputRef,selectedPdf}) 
             Your study materials are the starting points of a wondrous journey.
             Let's embark on a magical journey of understanding together.
           </p>
+          <img src={myGif} className={styles.story_gif}/>
         </div>
       </div>
     </div>

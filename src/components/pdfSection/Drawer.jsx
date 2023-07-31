@@ -124,7 +124,7 @@ export default function TemporaryDrawer({toggleDrawer1,bottom}) {
     // const scrollTargetRef = useRef(null);
     var fullHeight=0
     setTimeout(()=>{
-    fullHeight = mobileContainerRef.current ? mobileContainerRef.current.scrollTop - 150 : 0; // Check if mobileContainerRef is not null
+    fullHeight = mobileContainerRef.current.scrollTop - 150 ; // Check if mobileContainerRef is not null
     },1000)
     const handleScroll = () => {
       setTimeout(()=>{
