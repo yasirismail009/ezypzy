@@ -12,48 +12,48 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { Reveal } from "react-reveal";
 import { useScrollDirection } from "react-use-scroll-direction";
+import axios from "axios";
+
+// const [Thread, setThread] = useState([
+//   {
+//     title: "Lorem Ipsum is simply dummy text of the?",
+//     aires:
+//       "Consider each highlight a secret handshake between us - a sign from me to step in and lend a hand. But remember, there's no rush, we're here to enjoy the journey as much as the destination.  So take a deepbreath and when you're ready, let's jump in and make learning fun!",
+//     diagram: "",
+//     createDate: new Date("2022-07-20"),
+//   },
+//   {
+//     title: "Lorem Ipsum is simply dummy text of the 12?",
+//     aires:
+//       "Consider each highlight a secret handshake between us - a sign from me to step in and lend a hand. But remember, there's no rush, we're here to enjoy the journey as much as the destination.  So take a deepbreath and when you're ready, let's jump in and make learning fun! 122",
+//     diagram: "",
+//     createDate: new Date("2022-07-21"),
+//   },
+//   {
+//     title: "Lorem Ipsum is simply dummy text of the 12?",
+//     aires:
+//       "Consider each highlight a secret handshake between us - a sign from me to step in and lend a hand. But remember, there's no rush, we're here to enjoy the journey as much as the destination.  So take a deepbreath and when you're ready, let's jump in and make learning fun! 122",
+//     diagram: "",
+//     createDate: new Date("2022-07-22"),
+//   },
+//   {
+//     title: "Lorem Ipsum is simply dummy text of the 12?",
+//     aires: "",
+//     diagram: `
+//       graph TD;
+//     A-->B;
+//     A-->C;
+//     B-->D;
+//     C-->D;
+//       `,
+//     createDate: new Date("2022-07-22"),
+//   },
+// ]);
 
 const PDFUploaded = () => {
-  const paragraphRef = useRef(null);
   const messageContainerRef = useRef(null);
-  const [lines, setLines] = useState(
-    "Consider each highlight a secret handshake between us - a sign from me to step in and lend a hand. But remember, there's no rush, we're here to enjoy the journey as much as the destination.  So take a deepbreath and when you're ready, let's jump in and make learning fun!"
-  );
-  const [Thread, setThread] = useState([
-    {
-      title: "Lorem Ipsum is simply dummy text of the?",
-      aires:
-        "Consider each highlight a secret handshake between us - a sign from me to step in and lend a hand. But remember, there's no rush, we're here to enjoy the journey as much as the destination.  So take a deepbreath and when you're ready, let's jump in and make learning fun!",
-      diagram: "",
-      createDate: new Date("2022-07-20"),
-    },
-    {
-      title: "Lorem Ipsum is simply dummy text of the 12?",
-      aires:
-        "Consider each highlight a secret handshake between us - a sign from me to step in and lend a hand. But remember, there's no rush, we're here to enjoy the journey as much as the destination.  So take a deepbreath and when you're ready, let's jump in and make learning fun! 122",
-      diagram: "",
-      createDate: new Date("2022-07-21"),
-    },
-    {
-      title: "Lorem Ipsum is simply dummy text of the 12?",
-      aires:
-        "Consider each highlight a secret handshake between us - a sign from me to step in and lend a hand. But remember, there's no rush, we're here to enjoy the journey as much as the destination.  So take a deepbreath and when you're ready, let's jump in and make learning fun! 122",
-      diagram: "",
-      createDate: new Date("2022-07-22"),
-    },
-    {
-      title: "Lorem Ipsum is simply dummy text of the 12?",
-      aires: "",
-      diagram: `
-        graph TD;
-      A-->B;
-      A-->C;
-      B-->D;
-      C-->D;
-        `,
-      createDate: new Date("2022-07-22"),
-    },
-  ]);
+  const [lines, setLines] = useState();
+  const [Thread, setThread] = useState([]);
   // const sortedThreads = Thread.sort((a, b) => b.createDate - a.createDate);
 
   const [currentLineIndex, setCurrentLineIndex] = useState(0);
@@ -76,11 +76,6 @@ const PDFUploaded = () => {
     }
   };
 
-  useEffect(() => {
-    if (currentLineIndex === lines.length - 1) {
-      paragraphRef.current.style.opacity = 1;
-    }
-  }, [currentLineIndex, lines.length]);
   const [isSmallScreen, setIsSmallScreen] = useState(false);
 
   useEffect(() => {
@@ -124,7 +119,33 @@ const PDFUploaded = () => {
   const [scrollScale, setScrollScale] = useState(1);
   const [opacityScale, setOpacityScale] = useState(1);
   const [textAlign, setTextAlign] = useState("start");
-
+  const UpdateFileTitle = (title) => {
+    const data = {
+      fileId: fileData.fileId,
+      fileName: title,
+    };
+    axios
+      .patch("http://192.168.100.2:8001/ezypzy/file_save/", data)
+      .then((res) => {
+        ResetFiledata();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const ResetFiledata = () => {
+    axios
+      .get(
+        `http://192.168.100.2:8001/ezypzy/file_save/?fileId=${fileData.fileId}`
+      )
+      .then((res) => {
+        setFileData(res.data.result);
+        localStorage.setItem("file", JSON.stringify(res.data.result));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   useEffect(() => {
     // Function to check if the child is in the center of the parent
     const checkCentered = () => {
@@ -143,20 +164,19 @@ const PDFUploaded = () => {
     };
   }, []);
 
-  useEffect(() => {
-    if (currentLineIndex === lines.length - 1) {
-      paragraphRef.current.style.opacity = 1;
-    }
-  }, [currentLineIndex, lines.length]);
-
   // const scrollTargetRef = useRef(null);
   var fullHeight = 0;
   if (messageContainerRef) {
     setTimeout(() => {
       if (messageContainerRef.current) {
-      fullHeight = messageContainerRef.current.scrollTop - 150};
+        fullHeight = messageContainerRef.current.scrollTop - 150;
+      }
     }, 1000); // Check if messageContainerRef is not null
   }
+
+  const handleTechAndDiagram = (action, value) => {
+    alert(JSON.stringify(value));
+  };
 
   const handleScroll = () => {
     if (messageContainerRef.current) {
@@ -192,16 +212,10 @@ const PDFUploaded = () => {
         }
       >
         <PDFsection
-          Thread={Thread}
-          lines={lines}
-          dropDownData={dropDownData}
-          showDropDown={showDropDown}
-          setShowDropDown={setShowDropDown}
-          messageContainerRef={messageContainerRef}
-          paragraphRef={paragraphRef}
-          handleTypingDone={handleTypingDone}
           fileData={fileData}
           isSmallScreen={isSmallScreen}
+          UpdateFileTitle={UpdateFileTitle}
+          handleTechAndDiagram={handleTechAndDiagram}
         />
       </div>
       {isSmallScreen ? null : (
@@ -274,7 +288,7 @@ const PDFUploaded = () => {
                   transition: "transform 0.2s, opacity 0.2s",
                 }}
               >
-                {Thread.map((data, index) => (
+                {Thread?.map((data, index) => (
                   <div className={styles.childDiv} key={index}>
                     <div>
                       <p style={{ textAlign: `${textAlign}` }}>
@@ -289,65 +303,76 @@ const PDFUploaded = () => {
                     </div>
                   </div>
                 ))}
-
-                <div className={styles.childDiv}>
-                  <div className={styles.fade_in_paragraph} ref={paragraphRef}>
-                    <span className={styles.fade_in_line}>
-                      <Reveal effect="fadeIn">
-                        <Typist
-                          avgTypingDelay={50}
-                          cursor={{ hideWhenDone: true }}
-                          onTypingDone={handleTypingDone}
-                        >
-                          {lines}
-                        </Typist>
-                      </Reveal>
-                      <br />
-                    </span>
-                  </div>
-                  <input
-                    placeholder="Type here to ask"
-                    type="text"
-                    className={styles.inputAi}
-                    style={{ background: bgColor }}
-                  ></input>
-                  <div
-                    style={{
-                      width: "100%",
-                      textAlign: "start",
-                      display: "flex",
-                      alignItems: "center",
-                      zIndex: 3,
-                    }}
-                    onClick={(e) => {
-                      setShowDropDown(!showDropDown);
-                    }}
-                  >
-                    <span className={styles.dropDown}>
-                      Questions you may want to ask{" "}
-                    </span>
-                    <span>
-                      {showDropDown ? (
-                        <MdArrowDropUp
-                          style={{ fontSize: "20px", margin: 0 }}
-                        />
-                      ) : (
-                        <MdArrowDropDown
-                          style={{ fontSize: "20px", margin: 0 }}
-                        />
-                      )}
-                    </span>
-                  </div>
-                  {showDropDown ? (
-                    <div>
-                      {dropDownData.map((val, key) => (
-                        <p key={key} className={styles.dropdownItem}>
-                          {val}
-                        </p>
-                      ))}
+                {lines ? (
+                  <div className={styles.childDiv}>
+                    <div className={styles.fade_in_paragraph}>
+                      <span className={styles.fade_in_line}>
+                        <Reveal effect="fadeIn">
+                          <Typist
+                            avgTypingDelay={50}
+                            cursor={{ hideWhenDone: true }}
+                            onTypingDone={handleTypingDone}
+                          >
+                            {lines}
+                          </Typist>
+                        </Reveal>
+                        <br />
+                      </span>
                     </div>
-                  ) : null}
-                </div>
+                    <input
+                      placeholder="Type here to ask"
+                      type="text"
+                      className={styles.inputAi}
+                      style={{ background: bgColor }}
+                    ></input>
+                    <div
+                      style={{
+                        width: "100%",
+                        textAlign: "start",
+                        display: "flex",
+                        alignItems: "center",
+                        zIndex: 3,
+                      }}
+                      onClick={(e) => {
+                        setShowDropDown(!showDropDown);
+                      }}
+                    >
+                      <span className={styles.dropDown}>
+                        Questions you may want to ask{" "}
+                      </span>
+                      <span>
+                        {showDropDown ? (
+                          <MdArrowDropUp
+                            style={{ fontSize: "20px", margin: 0 }}
+                          />
+                        ) : (
+                          <MdArrowDropDown
+                            style={{ fontSize: "20px", margin: 0 }}
+                          />
+                        )}
+                      </span>
+                    </div>
+                    {showDropDown ? (
+                      <div>
+                        {dropDownData.map((val, key) => (
+                          <p key={key} className={styles.dropdownItem}>
+                            {val}
+                          </p>
+                        ))}
+                      </div>
+                    ) : null}
+                  </div>
+                ) : (
+                  <div className={styles.nodata}>
+                    <p>
+                      Look at that, your document is all set and ready to go!
+                    </p>
+                    <p>
+                    Feel free to start highlighting parts that feel like a tough nut to crack. Consider each highlight a secret handshake between us - a sign for me to step in and lend a hand. 
+                    </p>
+                    <p>But remember, there's no rush, we're here to enjoy the journey as much as the destination. So, take a deep breath and when you're ready, let's jump in and make learning fun!</p>
+                  </div>
+                )}
               </div>
             </div>
           </div>

@@ -71,7 +71,7 @@ export default function () {
             spacing={2}
             sx={{ justifyContent: "start", alignItems: "center" }}
           >
-            <Grid item lg={8} xs={6} sx={{ padding: "0 30px" }}>
+            <Grid item lg={8} xs={12} sx={{ padding: "0 30px" }}>
               <div>
                 <p className={styles.feature_title}>Feature</p>
                 <p className={styles.feature_des}>
@@ -86,7 +86,7 @@ export default function () {
             spacing={2}
             sx={{ justifyContent: "start", alignItems: "center" }}
           >
-            <Grid item lg={5} xs={6} sx={{ padding: "0 30px" }}>
+            <Grid item lg={5} xs={12} sx={{ padding: "0 30px" }}>
               <div
                 className={styles.feature_icon}
                 onMouseEnter={handleMouseEnter}
@@ -214,7 +214,7 @@ export default function () {
                 </div>
               
             </Grid>
-            <Grid item lg={6} xs={6}>
+            <Grid item lg={6} xs={12}>
                 <p className={styles.feature_notes}>Notes, articles, or powerpoint presentations. Notes, articles, or powerpoint presentations.
 Notes, articles, or powerpoint presentations.
 </p>

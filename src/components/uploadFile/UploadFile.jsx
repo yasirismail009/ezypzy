@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {useRef, useState } from "react";
 import { BsRecordCircle } from "react-icons/bs";
 import { AiOutlineFormatPainter } from "react-icons/ai";
 import styles from "./UploadFile.module.css";
@@ -9,7 +9,7 @@ import myGif from '../../assets/EzpZ-Fire.gif'
 const UploadFile = () => {
  const navigate = useNavigate()
   const fileInputRef = useRef(null);
-
+  const [loading, setLoading]= useState(false)
   const handleUpload = () => {
     fileInputRef.current.click();
   };
@@ -18,7 +18,7 @@ const UploadFile = () => {
 
   const handleFileUpload = async (event) => {
     const file = event.target.files[0];
-    console.log(file)
+   
     const fileExtension = file.name.split(".").pop().toLowerCase();
 
     const supportedFormats = ["doc", "docx", "pptx", "ppt", "pdf"];
@@ -34,18 +34,23 @@ const UploadFile = () => {
   
   };
   const uploadFile =(file)=>{
+    setLoading(true)
     const formData=  new FormData();
     formData.append("fileUpload",file)
     axios.post("http://192.168.100.2:8001/ezypzy/file_save/",formData).then((res)=>{
       localStorage.setItem("file",JSON.stringify(res.data.result))
       navigate('/viewPdf')
+      setLoading(false)
     }).catch((err)=>{
       console.log(err)
+      navigate('/viewPdf')
+      setLoading(false)
     })
   }
 
   return (
-    <div className={styles.main_div}>
+    <>
+    {loading?<div className={styles.loading}><img src={myGif} className={styles.story_gif}/></div>:<div className={styles.main_div}>
       <div className={styles.first_section}>
         <div>
           <p className={styles.main_heading}>Please Upload A Document</p>
@@ -78,7 +83,9 @@ const UploadFile = () => {
           <img src={myGif} className={styles.story_gif}/>
         </div>
       </div>
-    </div>
+    </div>}
+    
+    </>
   );
 };
 

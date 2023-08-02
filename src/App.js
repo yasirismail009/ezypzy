@@ -1,9 +1,7 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-
 import UploadFile from './components/uploadFile/UploadFile';
 import ViewPdf from './components/pdfUploaded/PDFUploaded';
-import { useRef, useState } from 'react';
 import Index from './components/LandingPage/Index';
 
 
