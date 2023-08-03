@@ -37,7 +37,7 @@ const UploadFile = () => {
     setLoading(true)
     const formData=  new FormData();
     formData.append("fileUpload",file)
-    axios.post("http://192.168.100.2:8001/ezypzy/file_save/",formData).then((res)=>{
+    axios.post("http://192.168.100.9:8001/ezypzy/file_save/",formData).then((res)=>{
       localStorage.setItem("file",JSON.stringify(res.data.result))
       navigate('/viewPdf')
       setLoading(false)

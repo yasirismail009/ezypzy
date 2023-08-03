@@ -67,24 +67,6 @@ export default function TemporaryDrawer({ toggleDrawer1, bottom }) {
   const [opacityScale, setOpacityScale] = useState(1);
   const [textAlign, setTextAlign] = useState("start");
 
-  useEffect(() => {
-    // Function to check if the child is in the center of the parent
-    const checkCentered = () => {
-      // ... (same as the previous example)
-    };
-
-    // Attach the event listener to check for centering when the window is resized
-    window.addEventListener("resize", checkCentered);
-
-    // Initial check on mount
-    checkCentered();
-
-    // Clean up the event listener on unmount
-    return () => {
-      window.removeEventListener("resize", checkCentered);
-    };
-  }, []);
-
   // const scrollTargetRef = useRef(null);
   var fullHeight = 0;
   const handlesetFullHeight = () => {
@@ -122,7 +104,7 @@ export default function TemporaryDrawer({ toggleDrawer1, bottom }) {
       // Clean up the event listener on unmount
       return () => {
         if (mobileContainerRef.current) {
-          mobileContainerRef.current.removeEventListener(
+          mobileContainerRef.current?.removeEventListener(
             "scroll",
             handleScroll
           );

@@ -125,7 +125,7 @@ const PDFUploaded = () => {
       fileName: title,
     };
     axios
-      .patch("http://192.168.100.2:8001/ezypzy/file_save/", data)
+      .patch("http://192.168.100.9:8001/ezypzy/file_save/", data)
       .then((res) => {
         ResetFiledata();
       })
@@ -136,7 +136,7 @@ const PDFUploaded = () => {
   const ResetFiledata = () => {
     axios
       .get(
-        `http://192.168.100.2:8001/ezypzy/file_save/?fileId=${fileData.fileId}`
+        `http://192.168.100.9:8001/ezypzy/file_save/?fileId=${fileData.fileId}`
       )
       .then((res) => {
         setFileData(res.data.result);
@@ -146,23 +146,6 @@ const PDFUploaded = () => {
         console.log(err);
       });
   };
-  useEffect(() => {
-    // Function to check if the child is in the center of the parent
-    const checkCentered = () => {
-      // ... (same as the previous example)
-    };
-
-    // Attach the event listener to check for centering when the window is resized
-    window.addEventListener("resize", checkCentered);
-
-    // Initial check on mount
-    checkCentered();
-
-    // Clean up the event listener on unmount
-    return () => {
-      window.removeEventListener("resize", checkCentered);
-    };
-  }, []);
 
   // const scrollTargetRef = useRef(null);
   var fullHeight = 0;
@@ -197,10 +180,21 @@ const PDFUploaded = () => {
   useEffect(() => {
     // Add the scroll event listener when the component mounts
     messageContainerRef.current.addEventListener("scroll", handleScroll);
+ // Function to check if the child is in the center of the parent
+ const checkCentered = () => {
+  // ... (same as the previous example)
+};
+
+// Attach the event listener to check for centering when the window is resized
+window.addEventListener("resize", checkCentered);
+
+// Initial check on mount
+checkCentered();
 
     // Remove the scroll event listener when the component unmounts
     return () => {
-      messageContainerRef.current.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", checkCentered);
+      messageContainerRef.current?.removeEventListener("scroll", handleScroll);
     };
   }, []);
   console.log(fileData);

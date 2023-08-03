@@ -20,8 +20,10 @@ export default function HomePage() {
     <div className={styles.main_div}>
         <div className={styles.flexData}>
             <div className={styles.blockDisplay}>
+              <div className={styles.subBlock}>
             <p className={styles.subHeading}>Greetings, my name is</p>
             <img src={Homepage} className={styles.home_image}/>
+            </div>
          <h1 className={styles.mainHeading}>Mr.EzPz</h1>
          </div>
          <p className={styles.paragraph}>I’m here to make learning easy peasy for you.</p>

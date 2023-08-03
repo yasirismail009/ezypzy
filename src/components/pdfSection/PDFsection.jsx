@@ -342,7 +342,8 @@ class PDFsection extends Component {
                 }}
               >
                 <PdfLoader
-                  url={fileData?.file}
+                  url={url}
+                  // url={fileData?.file}
                   ref={pdfHighlighterRef}
                   key={highlighterKey}
                   beforeLoad={<div>loading...</div>}
@@ -538,7 +539,8 @@ class PDFsection extends Component {
                   }}
                 >
                   <PdfLoader
-                    url={fileData?.file}
+                    url={url}
+                    // url={fileData?.file}
                     ref={pdfHighlighterRef}
                     key={highlighterKey}
                      beforeLoad={<div className={styles.loading}><img src={myGif} className={styles.story_gif}/></div>}
