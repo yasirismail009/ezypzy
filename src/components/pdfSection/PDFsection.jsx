@@ -8,8 +8,10 @@ import {
   AreaHighlight,
 } from "./react-pdf-highlighter";
 import highlighticon from "../../assets/highlight_icon.png";
-import chalkboarduser from "../../assets/chalkboard-user.png";
-import penswirl from "../../assets/pen-swirl.png";
+import chalkboarduser from "../../assets/chalkboard-user.svg";
+import penswirl from "../../assets/pen-swirl.svg";
+import chalkboarduserwhite from "../../assets/chalkboard-user-white.svg";
+import penswirlwhite from "../../assets/pen-swirl-white.svg";
 import rectangle from "../../assets/rectangle-vertical-history.png";
 import {
   Drawer,
@@ -18,13 +20,13 @@ import {
   SwipeableDrawer,
   TextField,
 } from "@mui/material";
-import teach from "../../assets/chalkboard-user.png";
-import draw from "../../assets/pen-swirl.png";
+import teach from "../../assets/chalkboard-user.svg";
+import draw from "../../assets/pen-swirl.svg";
 import tracker from "../../assets/rectangle-vertical-history.png";
 import styles from "../pdfUploaded/PDFUploaded.module.css";
 import mobilestyles from "../pdfMobile/PDFMobile.module.css";
 import myGif from '../../assets/EzpZ-Fire.gif'
-import DrawerData from "./Drawer";
+import DrawerData from "../pdfMobile/Drawer";
 
 const options = ["None", "Atria"];
 
@@ -444,6 +446,7 @@ class PDFsection extends Component {
             handleChat={handleChat}
             loading={loading}
             typingKey={typingKey}
+            updateHash={this.updateHash}
              />
 
 <SwipeableDrawer
@@ -522,7 +525,8 @@ class PDFsection extends Component {
                   onMouseLeave={this.handleMouseLeaveTaech}
                   onClick={()=>{handleTechAndDiagram("teach", highlights.length>0? highlights[0].content.text:"no data")}}
                 >
-                  <img src={chalkboarduser} alt="Chalkboard Icon" />
+                   {showTeachText ? (
+                  <img src={chalkboarduserwhite} alt="Chalkboard Icon" />): <img src={chalkboarduser} alt="Chalkboard Icon" />}
                   {showTeachText ? (
                     <p style={{ marginLeft: "5px" }}>Teach Me</p>
                   ) : null}
@@ -534,11 +538,11 @@ class PDFsection extends Component {
                   onClick={()=>{handleTechAndDiagram("diagram", highlights.length>0? highlights[0].content.text:"no data")}}
                 >
                    {showDiagramText ? (
-                    <img src={penswirl} alt="Pen Swirl Icon" />
+                    <img src={penswirlwhite} alt="Pen Swirl Icon" />
                   ) :  <img src={penswirl} alt="Pen Swirl Icon" />}
                  
                   {showDiagramText ? (
-                    <p style={{ marginLeft: "5px" }}>Diagram</p>
+                    <p style={{ marginLeft: "5px" }}>Draw For Me</p>
                   ) : null}
                 </div>
                 <div

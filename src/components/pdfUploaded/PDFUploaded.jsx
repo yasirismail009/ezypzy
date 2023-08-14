@@ -427,6 +427,8 @@ const PDFUploaded = () => {
             highlighterKey={highlighterKey}
             position={position}
             handleChat={handleChat}
+            loading={loading}
+            typingKey={typingKey}
           />
         </div>
         {isSmallScreen ? null : (

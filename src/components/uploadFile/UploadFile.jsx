@@ -5,7 +5,7 @@ import styles from "./UploadFile.module.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import myGif from '../../assets/EzpZ-Fire.gif'
-import { Menu, MenuItem } from "@mui/material";
+import { RotatingLines } from "react-loader-spinner";
 
 const UploadFile = () => {
  const navigate = useNavigate()
@@ -47,11 +47,10 @@ const UploadFile = () => {
     axios.post("https://api.mrezpz.ai/process_document_upload/",formData).then((res)=>{
       localStorage.setItem("doc_data",JSON.stringify(res.data))
       localStorage.setItem("fileExtension",JSON.stringify(fileExtension))
-      navigate('/viewPdf')
+      navigate('/letstart')
       setLoading(false)
     }).catch((err)=>{
       console.log(err)
-      navigate('/viewPdf')
       setLoading(false)
     })
   }
@@ -63,7 +62,8 @@ const UploadFile = () => {
   };
   return (
     <>
-    {loading?<div className={styles.loading}><img src={myGif} className={styles.story_gif}/></div>:<div className={styles.main_div}>
+    {/* {loading?<div className={styles.loading}><img src={myGif} className={styles.story_gif}/></div>: */}
+    <div className={styles.main_div}>
       <div className={styles.first_section}>
         <div>
           <p className={styles.main_heading}>Please Upload A Document</p>
@@ -75,8 +75,15 @@ const UploadFile = () => {
         ref={fileInputRef}
         style={{ display: "none" }}
       />
-            <button  className={styles.upload_btn} onClick={handleUpload}>Upload File</button>
-            <p className={styles.drag_and_drop}>or drag and drop here</p>
+      {loading?<RotatingLines
+  strokeColor="grey"
+  strokeWidth="5"
+  animationDuration="0.75"
+  width="70"
+  visible={true}
+/>:<> <button  className={styles.upload_btn} onClick={handleUpload}>Upload File</button>
+            <p className={styles.drag_and_drop}>or drag and drop here</p></>}
+           
           </div>
           <p className={styles.pdf_format_only}>
             PDF Format Only Not Exceeding 300 Mbs
@@ -147,7 +154,8 @@ const UploadFile = () => {
           <img src={myGif} className={styles.story_gif}/>
         </div>
       </div>
-    </div>}
+    </div>
+    {/* } */}
     
     </>
   );

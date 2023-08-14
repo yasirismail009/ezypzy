@@ -9,7 +9,7 @@ import Skeleton from "@mui/material/Skeleton";
 import Typography from "@mui/material/Typography";
 import Typist from "react-typist";
 import { Reveal } from "react-reveal";
-import styles from "../pdfMobile/PDFMobile.module.css";
+import styles from "./PDFMobile.module.css";
 import MermaidDiagram from "../pdfUploaded/Mermaid";
 import { MdArrowDropDown, MdArrowDropUp } from "react-icons/md";
 import Menu from "@mui/material/Menu";
@@ -33,6 +33,7 @@ export default function TemporaryDrawer({
   highlights,
   handleChat,
   loading,
+  updateHash
 }) {
   // const mobileparagraphRef = useRef();
   const mobileContainerRef = useRef();
@@ -152,6 +153,7 @@ export default function TemporaryDrawer({
       }, 10000);
     }
     scrollToBottom2()
+    setShowFields(false)
     setTypingKey((prevKey) => prevKey + 1);
   }, [lines]);
   return (
@@ -196,7 +198,7 @@ export default function TemporaryDrawer({
                 <h5 className={styles.tracker_title}>Tracker</h5>
                   {highlights.map((val, key)=>(
                 <div style={{display:"flex", justifyContent:"space-between", alignItems:"center", padding:"0 10px"}} key={key}>
-                    <p className={styles.tracker_highlights}>{key+1}  {val.content.text.length > 30
+                    <p className={styles.tracker_highlights} onClick={e=>{updateHash(val)}}>{key+1}  {val.content.text.length > 30
                       ? val.content.text.slice(0, 28) + "..."
                       : val.content.text}</p>
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
