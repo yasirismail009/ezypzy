@@ -64,17 +64,17 @@ class PDFsection extends Component {
       anchorEl: null,
       bottom: false,
       bottom2: false,
-      fontScale: 0.1,
       highlighterKey: Date.now(),
       showTeachText: false,
       showDiagramText: false,
       showTrackerText: false,
       anchorEl2: null,
+      trackerView: false,
     };
   }
 
 
-  toggleDrawer1 = (anchor, open) => (event) => {
+  toggleDrawer1 = (anchor, open, type, handleDiagram) => (event) => {
     console.log(anchor, open);
     if (
       event &&
@@ -83,8 +83,15 @@ class PDFsection extends Component {
     ) {
       return;
     }
-    this.setState({ ...this.state, [anchor]: open });
-  };
+    if (type==="teach"|| type==="diagram"){
+      this.setState({...this.state, trackerView:false,[anchor]: open })
+      handleDiagram(type, this.state.highlights.length>0?  this.state.highlights[0].content.text:"no data")
+    } else if(type==="tracker"){
+      this.setState({...this.state, trackerView:true,[anchor]: open })
+    } else{
+      this.setState({...this.state, trackerView:false,[anchor]: open })
+    }
+  };  
   toggleDrawer2 = (anchor, open) => (event) => {
     if (
       event &&
@@ -169,6 +176,7 @@ class PDFsection extends Component {
   };
 
   componentDidMount() {
+    console.log(this.statefontScale)
     window.addEventListener(
       "hashchange",
       this.scrollToHighlightFromHash,
@@ -191,20 +199,7 @@ class PDFsection extends Component {
       highlights: [{ ...highlight, id: getNextId() }, ...highlights],
     });
   }
-  handleZoomOut = () => {
-    const { fontScale } = this.state;
-    this.setState((prevState) => ({
-      fontScale: prevState.fontScale - 0.5,
-      highlighterKey: Date.now(),
-    }));
-  };
-  handleZoomIn = () => {
-    const { fontScale } = this.state;
-    this.setState((prevState) => ({
-      fontScale: prevState.fontScale + 0.5,
-      highlighterKey: Date.now(),
-    }));
-  };
+ 
   handleClick = (event) => {
     this.setState({ anchorEl2: event.currentTarget });
   };
@@ -241,31 +236,49 @@ class PDFsection extends Component {
       url,
       highlights,
       showSummary,
-      fontScale,
-      highlighterKey,
       pdfHighlighterRef,
       anchorEl,
       showTeachText,
       showDiagramText,
       showTrackerText,
       bottom,
+      trackerView
     } = this.state;
-    const { UpdateFileTitle, fileData, isSmallScreen,handleTechAndDiagram } = this.props;
+    const { 
+      UpdateFileTitle, 
+      fileData, 
+      isSmallScreen,
+      handleTechAndDiagram,
+      summeryData ,
+      lines,
+      dropDownData,
+      mermaidCode,
+      Thread,
+      handleZoomOut,
+      handleZoomIn,
+      fontScale,
+      highlighterKey,
+      position,
+      handleChat,
+      loading,
+      typingKey
+    } = this.props;
     return (
       <>
         {isSmallScreen ? (
           <div className={mobilestyles.main_div}>
             <div className={mobilestyles.header}>
-              <TextField
+              <input
                 className={mobilestyles.heading}
                 defaultValue={
-                  fileData?.fileName.length > 40
-                    ? fileData?.fileName.slice(0, 40) + "..."
-                    : fileData?.fileName
+                  fileData?.documentTitle?.length > 40
+                    ? fileData?.documentTitle.slice(0, 40) + "..."
+                    : fileData?.documentTitle
                 }
                 onBlur={(e) => {
                   UpdateFileTitle(e.target.value);
                 }}
+              
               />
               <div className={mobilestyles.summary_edit_section}>
                 <button onClick={this.handleToggleSummary}>Summary</button>
@@ -276,14 +289,14 @@ class PDFsection extends Component {
                   <div className={mobilestyles.text_edit_section}>
                     <p
                       className={mobilestyles.small_A}
-                      onClick={this.handleZoomOut}
+                      onClick={handleZoomOut}
                     >
                       A
                     </p>
                     <p style={{ margin: 0 }}>|</p>
                     <p
                       className={mobilestyles.capital_A}
-                      onClick={this.handleZoomIn}
+                      onClick={handleZoomIn}
                     >
                       A
                     </p>
@@ -296,10 +309,7 @@ class PDFsection extends Component {
               >
                 <p className={mobilestyles.summary_heading}>Summary</p>
                 <p>
-                  This document outlines the critical role of sustainable energy
-                  technologies in fostering a greener future. It examines the
-                  current energy landscape, identifies key challenges, and
-                  presents innovative solutions to address them.
+                {summeryData}
                 </p>
                 <button>Hide</button>
               </div>
@@ -309,21 +319,21 @@ class PDFsection extends Component {
                 <div className={mobilestyles.footer_icons}>
                   <div
                     className={mobilestyles.teach_icon}
-                    onClick={this.toggleDrawer1("bottom", true)}
+                    onClick={this.toggleDrawer1("bottom", true,"teach",handleTechAndDiagram)}
                   >
                     <img src={teach} />
                     <p>Teach</p>
                   </div>
                   <div
                     className={mobilestyles.draw_icon}
-                    onClick={this.toggleDrawer1("bottom", true)}
+                    onClick={this.toggleDrawer1("bottom", true,"diagram",handleTechAndDiagram)}
                   >
                     <img src={draw} />
                     <p>Draw</p>
                   </div>
                   <div
                     className={mobilestyles.tracker_icon}
-                    onClick={this.toggleDrawer2("bottom2", true)}
+                    onClick={this.toggleDrawer1("bottom", true,"tracker")}
                   >
                     <img src={tracker} />
                     <p>Tracker</p>
@@ -336,14 +346,13 @@ class PDFsection extends Component {
             <div className={mobilestyles.footer}>
               <div
                 style={{
-                  height: showSummary ? "55vh" : "80vh",
+                  height: showSummary ? "55vh" : "88vh",
                   width: "100%",
                   position: "relative",
                 }}
               >
                 <PdfLoader
-                  url={url}
-                  // url={fileData?.file}
+                  url={fileData?.documentURL}
                   ref={pdfHighlighterRef}
                   key={highlighterKey}
                   beforeLoad={<div>loading...</div>}
@@ -386,6 +395,7 @@ class PDFsection extends Component {
                             isScrolledTo={isScrolledTo}
                             position={highlight.position}
                             comment={highlight.comment}
+                           
                           />
                         ) : (
                           <AreaHighlight
@@ -421,7 +431,20 @@ class PDFsection extends Component {
                 </PdfLoader>
               </div>
             </div>
-            <DrawerData toggleDrawer1={this.toggleDrawer1} bottom={bottom} />
+            <DrawerData 
+            toggleDrawer1={this.toggleDrawer1} 
+            bottom={bottom}
+            lines={lines}
+            dropDownData={dropDownData}
+            summeryData={summeryData}
+            mermaidCode={mermaidCode}
+            Thread={Thread}
+            trackerView={trackerView}
+            highlights={highlights}
+            handleChat={handleChat}
+            loading={loading}
+            typingKey={typingKey}
+             />
 
 <SwipeableDrawer
   sx={{ maxHeight: "100vh", zIndex: 9999999 }}
@@ -450,9 +473,9 @@ class PDFsection extends Component {
                 <input
                   className={styles.heading}
                   defaultValue={
-                    fileData?.fileName.length > 15
-                      ? fileData?.fileName.slice(0, 15) + "..."
-                      : fileData?.fileName
+                    fileData?.documentTitle?.length > 15
+                      ? fileData?.documentTitle.slice(0, 15) + "..."
+                      : fileData?.documentTitle
                   }
                   onBlur={(e) => {
                     UpdateFileTitle(e.target.value);
@@ -471,11 +494,11 @@ class PDFsection extends Component {
                   
                 </div>
                 <div className={styles.text_edit}>
-                  <p className={styles.small_A} onClick={this.handleZoomOut}>
+                  <p className={styles.small_A} onClick={handleZoomOut}>
                     A
                   </p>
                   <p className={styles.seperator}>|</p>
-                  <p className={styles.capital_A} onClick={this.handleZoomIn}>
+                  <p className={styles.capital_A} onClick={handleZoomIn}>
                     A
                   </p>
                 </div>
@@ -487,10 +510,7 @@ class PDFsection extends Component {
             >
               <p className={styles.summary_heading}>Summary</p>
               <p className={styles.summary}>
-                This document outlines the critical role of sustainable energy
-                technologies in fostering a greener future. It examines the
-                current energy landscape, identifies key challenges, and
-                presents innovative solutions to address them.
+               {summeryData}
               </p>
               <button onClick={this.handleToggleSummary}>Hide</button>
             </div>
@@ -500,7 +520,7 @@ class PDFsection extends Component {
                   className={styles.chalkboard_icon}
                   onMouseEnter={this.handleMouseEnterTeach}
                   onMouseLeave={this.handleMouseLeaveTaech}
-                  onClick={()=>{handleTechAndDiagram("tech", highlights[0].content.text)}}
+                  onClick={()=>{handleTechAndDiagram("teach", highlights.length>0? highlights[0].content.text:"no data")}}
                 >
                   <img src={chalkboarduser} alt="Chalkboard Icon" />
                   {showTeachText ? (
@@ -511,9 +531,12 @@ class PDFsection extends Component {
                   className={styles.penswirl_icon}
                   onMouseEnter={this.handleMouseEnterDiagram}
                   onMouseLeave={this.handleMouseLeaveDiagram}
-                  onClick={()=>{handleTechAndDiagram("diagram", highlights[0].content.text)}}
+                  onClick={()=>{handleTechAndDiagram("diagram", highlights.length>0? highlights[0].content.text:"no data")}}
                 >
-                  <img src={penswirl} alt="Pen Swirl Icon" />
+                   {showDiagramText ? (
+                    <img src={penswirl} alt="Pen Swirl Icon" />
+                  ) :  <img src={penswirl} alt="Pen Swirl Icon" />}
+                 
                   {showDiagramText ? (
                     <p style={{ marginLeft: "5px" }}>Diagram</p>
                   ) : null}
@@ -534,13 +557,13 @@ class PDFsection extends Component {
                 <div
                   style={{
                     height: "100vh",
-                    width: "48vw",
+                    width: `${position-5}vw` ,
                     position: "relative",
                   }}
                 >
                   <PdfLoader
-                    url={url}
-                    // url={fileData?.file}
+                    // url={url}
+                    url={fileData?.documentURL}
                     ref={pdfHighlighterRef}
                     key={highlighterKey}
                      beforeLoad={<div className={styles.loading}><img src={myGif} className={styles.story_gif}/></div>}
@@ -577,12 +600,16 @@ class PDFsection extends Component {
                           const isTextHighlight = !Boolean(
                             highlight.content && highlight.content.image
                           );
-
+                          const backgroundColors = ['red', 'green', 'blue', 'yellow', 'orange']; // Add more colors if needed
+                          const backgroundColor = backgroundColors[index % backgroundColors.length];
                           const component = isTextHighlight ? (
                             <Highlight
                               isScrolledTo={isScrolledTo}
                               position={highlight.position}
                               comment={highlight.comment}
+                              style={{
+                                backgroundColor,
+                              }}
                             />
                           ) : (
                             <AreaHighlight

@@ -2,9 +2,17 @@
   display: flex;
   flex-direction: row;
   overflow: hidden;
+  width: 100%;
+  height: 100vh;
+
+}
+.sections_container{
+  display: flex;
+  width: 100%;
 }
 .first_section {
-  width: 50%;
+  flex: 0 0 auto;
+  transition: width 0.3s;
   height: 100vh;
   /* background-color: green; */
   margin: 0;
@@ -18,7 +26,7 @@
   /* background-color: green; */
   margin: 0;
   padding: 0;
-  overflow: scroll;
+  overflow: hidden;
 }
 .first_section::-webkit-scrollbar {
   width: 0em !important;
@@ -66,13 +74,14 @@
   padding: 3px 15px;
   border-radius: 5px;
   border: none;
-  background: #afe5bb;
+  background: var(--colors-default-bg, linear-gradient(180deg, #FDA88F 0%, rgba(255, 223, 156, 0.60) 100%));
 }
 .edit_section {
   display: flex;
   flex-direction: row;
   align-items: center;
   margin: 10px 30px 0px 0px;
+  z-index: 999999;
 }
 .highlight {
   display: flex;
@@ -120,6 +129,26 @@
   margin: 0;
   cursor: pointer;
 }
+.slider {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 6px;
+  background-color: #0e0e0e;
+  cursor: ew-resize;
+}
+
+.handle {
+  position: absolute;
+  top: 50%;
+  left: -6px;
+  transform: translate(-50%, -50%);
+  width: 12px;
+  height: 12px;
+  background-color: #070707;
+  border-radius: 50%;
+  z-index: 9999;
+}
 .summary_section {
   
   font-family: "IBM Plex Sans", sans;
@@ -129,7 +158,7 @@
   margin-top: 5px;
   padding: 15px 13px 5px 18px;
   border-radius: 5px;
-  background: var(--aibg-1, rgba(196, 248, 183, 0.3));
+  background: var(--colors-default-bg, linear-gradient(180deg, #FDA88F 0%, rgba(255, 223, 156, 0.60) 100%));
   /* background-color: red; */
   position: relative;
   z-index: 2;
@@ -154,7 +183,7 @@
   padding: 3px 10px;
   border-radius: 5px;
   font-size: 12 px;
-  background: #afe5bb;
+  background: var(--colors-default-bg, linear-gradient(180deg, #FDA88F 0%, rgba(255, 223, 156, 0.60) 100%));
   border: none;
 }
 .pdf_section {
@@ -162,7 +191,20 @@
   flex-direction: row;
   align-items: center;
   padding: 20px;
+  height: 100vh;
+  overflow: scroll;
   /* background-color: red; */
+}
+.pdf_section::-webkit-scrollbar {
+  width: 0em !important;
+}
+
+.pdf_section::-webkit-scrollbar-track {
+  background-color: transparent !important;
+}
+
+.pdf_section::-webkit-scrollbar-thumb {
+  background-color: transparent !important;
 }
 .pdf_icons {
  position: absolute;
@@ -179,6 +221,7 @@
   padding: 10px 6px;
   border: 1px solid #cecece;
   border-radius: 15px 15px 0px 0px;
+  cursor: pointer;
 }
 .penswirl_icon {
   display: flex;
@@ -189,6 +232,7 @@
   max-width: 20px;
   border: 1px solid #cecece;
   border-radius: 0px 0px 15px 15px;
+  cursor: pointer;
 }
 .rectangle_icon {
   margin-top: 10px;
@@ -199,22 +243,59 @@
   max-width: 20px;
   border: 1px solid #cecece;
   border-radius: 15px 15px 15px 15px;
+  cursor: pointer;
+}
+.penswirl_icon p{
+  margin: 0;
+  font-family: IBM Plex Sans;
+font-size: 15px;
+font-weight: 400;
+line-height: 33px;
+letter-spacing: 0em;
+text-align: left;
+
+}
+.chalkboard_icon p{
+  margin: 0;
+  font-family: IBM Plex Sans;
+font-size: 15px;
+font-weight: 400;
+line-height: 33px;
+letter-spacing: 0em;
+text-align: left;
+
+}
+.rectangle_icon p{
+  margin: 0;
+  font-family: IBM Plex Sans;
+font-size: 15px;
+font-weight: 400;
+line-height: 33px;
+letter-spacing: 0em;
+text-align: left;
+
 }
 .rectangle_icon:hover{
-  background-color: #AFE5BB;
+  background:  #1D1D1D;
+  color: white;
   min-width: 90px;
-  padding: 2px 3px;
+  padding: 6px 2px;
+  margin: 0;
 }
 .penswirl_icon:hover{
-  background-color: #AFE5BB;
+  background: #1D1D1D;
+  color: white;
   min-width: 90px;
-  padding: 2px 3px;
+  padding: 6px 2px;
+  margin: 0;
 
 }
 .chalkboard_icon:hover{
-  background-color: #AFE5BB;
+  background:  #1D1D1D;
+  color: white;
   min-width: 90px;
-  padding: 2px 3px;
+  padding: 6px 2px;
+  margin: 0;
 }
 .pdf_img {
   /* background-color: black; */
@@ -230,7 +311,8 @@
   /* background-color: red; */
 }
 .second_section {
-  width: 50%;
+  flex: 0 0 auto;
+  transition: width 0.3s;
   height: 100vh;
   position: relative;
   overflow: scroll;
@@ -276,12 +358,34 @@
   /* background-color: red; */
   margin-top: -180px;
 }
-.second_section p {
+.loadingstate{
+  display:flex;
+   flex-direction:column;
+    width:100%;
+    height:100vh;
+     justify-content:center;
+     align-items:center
+}
+.loadingstate p {
   margin-top: 18px;
 }
 .fade_in_paragraph {
+  width: 100%;
   opacity: 0;
+  max-height: 75%;
+  overflow: scroll;
   animation: fadeIn 10s ease-in-out forwards;
+}
+.fade_in_paragraph::-webkit-scrollbar {
+  width: 0em !important;
+}
+
+.fade_in_paragraph::-webkit-scrollbar-track {
+  background-color: transparent !important;
+}
+
+.fade_in_paragraph::-webkit-scrollbar-thumb {
+  background-color: transparent !important;
 }
 
 .fade_in_line {
@@ -306,7 +410,8 @@ font-weight: 400;
 line-height: 25px; /* 178.571% */
 }
 .inputAi{
-  width: 98%; color: #ACACAC; font-size: 14px; font-family: IBM Plex Serif; font-weight: 400; line-height: 27px; word-wrap: break-word;
+  min-width: 98%; 
+  color: #ACACAC; font-size: 14px; font-family: IBM Plex Serif; font-weight: 400; line-height: 27px; word-wrap: break-word;
   z-index: 1;
   border: none;
   margin-bottom: 10px;
@@ -320,23 +425,33 @@ line-height: 25px; /* 178.571% */
   color: #ACACAC; /* Replace this with the desired hover placeholder color */
 }
 .dropDown{
-  color: black; font-size: 14px; font-family: IBM Plex Serif; font-weight: 500; line-height: 27px; word-wrap: break-word
+  color: #000;
+font-family: IBM Plex Serif;
+font-size: 14px;
+font-style: normal;
+font-weight: 500;
+line-height: 27px; /* 192.857% */
+  width: 100%;
+  cursor: pointer;
 }
 .dropDownIcon{
  color: black; font-size: 14px; font-family: Font Awesome 6 Pro; font-weight: 400; line-height: 27px; word-wrap: break-word;
  margin-right: 10px;
+ cursor: pointer;
 }
 
 .dropdownItem{
   background-color: rgba(0, 0, 0, 0.03);
   color: #000;
-font-family: IBM Plex Serif;
-font-size: 14px;
-font-style: normal;
-font-weight: 400;
-line-height: normal;
+  font-family: IBM Plex Serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 text-align: start;
-padding: 2PX 4PX;
+padding: 10px 20px;
+margin: 4px 0;
+cursor: pointer;
 }
 .scrollView{
   z-index: 1;
@@ -355,11 +470,12 @@ padding: 2PX 4PX;
   background-color: transparent !important;
 }
 .childDiv{
-  height: 70%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding-top: 45px;
 }
 .mermaidData{
   display: flex;
@@ -390,4 +506,41 @@ padding: 2PX 4PX;
   flex-direction: column;
   justify-content: center;
   height: 100%;
+}
+.nodata p{
+  color: #000;
+
+/* AI Response */
+font-family: IBM Plex Sans;
+font-size: 16px;
+font-style: normal;
+font-weight: 400;
+line-height: 27px; /* 168.75% */
+}
+.typing{
+  color: #000;
+
+/* AI Response */
+font-family: IBM Plex Sans;
+font-size: 16px;
+font-style: normal;
+font-weight: 400;
+line-height: 27px; /* 168.75% */
+}
+@media (max-width: 768px) {
+  .slider{
+    display: none;
+  }
+  .first_section_small::-webkit-scrollbar {
+    width: 0em !important;
+  }
+  
+  .first_section_small::-webkit-scrollbar-track {
+    background-color: transparent !important;
+  }
+  
+  .first_section_small::-webkit-scrollbar-thumb {
+    background-color: transparent !important;
+  }
+
 }

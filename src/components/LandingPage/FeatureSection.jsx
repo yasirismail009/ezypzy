@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Homepage.module.css";
 import { Grid } from "@mui/material";
 import FeatureImage from '../../assets/Sidepose.gif'
@@ -61,22 +61,45 @@ export default function () {
     setIsHoveredFive(false);
     // Add your logic for onMouseLeave here
   };
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth <= 768); // Adjust the width threshold as needed
+    };
+
+    // Initial check
+    handleResize();
+
+    // Event listener for window resize
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup the event listener when the component is unmounted
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
   return (
+    <>
     <div className={styles.feature}>
-      <div className={styles.centerBlock}>
-        <div style={{width:"70%"}}>
+    <div className={styles.centerBlock}>
+    <Grid
+          container
+          spacing={2}
+          sx={{ justifyContent: "center", alignItems: "center" }}
+        >
+    <Grid item lg={8} md={6} xs={12} sx={{padding:"0 30px"}}>
           <Grid
             container
             spacing={2}
             sx={{ justifyContent: "start", alignItems: "center" }}
           >
-            <Grid item lg={8} xs={12} sx={{ padding: "0 30px" }}>
-              <div>
+            <Grid item lg={12} md={8} xs={10} sx={{padding:"0 30px"}}>
+              <div style={{width:"100%"}}>
                 <p className={styles.feature_title}>Feature</p>
                 <p className={styles.feature_des}>
                   Let’s begin our journey of making learning{" "}
-                  <span style={{ color: "#F96033" }}>easy peasy</span> for you.
+                  <span style={{ color: "#F96033", fontStyle:"italic" }}>easy peasy</span> for you.
                 </p>
               </div>
             </Grid>
@@ -84,9 +107,10 @@ export default function () {
           <Grid
             container
             spacing={2}
-            sx={{ justifyContent: "start", alignItems: "center" }}
+            sx={{ justifyContent: "start", alignItems: "center"  }}
           >
-            <Grid item lg={5} xs={12} sx={{ padding: "0 30px" }}>
+           <Grid item lg={6} md={6} xs={11} sx={{ padding: "0 30px" }}>
+              <div className={styles.features_option_parent}>
               <div
                 className={styles.feature_icon}
                 onMouseEnter={handleMouseEnter}
@@ -96,6 +120,7 @@ export default function () {
                   Start by uploading a document
                 </p>
                 {isHovered ? (
+                  isSmallScreen?null:
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="26"
@@ -121,6 +146,7 @@ export default function () {
                   Receive simplified explanations for your content
                   </p>
                   {isHoveredData ? (
+                     isSmallScreen?null:
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="26"
@@ -146,6 +172,7 @@ export default function () {
                   Immerse in the visual learning experience
                   </p>
                   {isHoveredThird ? (
+                     isSmallScreen?null:
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="26"
@@ -171,6 +198,7 @@ export default function () {
                   Engage in dynamic dialogue
                   </p>
                   {isHoveredFour ? (
+                     isSmallScreen?null:
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="26"
@@ -196,6 +224,7 @@ export default function () {
                   Engage in dynamic dialogue
                   </p>
                   {isHoveredFive ? (
+                     isSmallScreen?null:
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="26"
@@ -212,18 +241,21 @@ export default function () {
                     </svg>
                   ) : null}
                 </div>
-              
+                </div>
             </Grid>
-            <Grid item lg={6} xs={12}>
+           
+            <Grid item lg={6} md={6} xs={12}>
                 <p className={styles.feature_notes}>Notes, articles, or powerpoint presentations. Notes, articles, or powerpoint presentations.
 Notes, articles, or powerpoint presentations.
 </p>
               <img src={FeatureImage} className={styles.feature_gif}/>
             </Grid>
           </Grid>
-        </div>
+        </Grid>
+        </Grid>
+      </div>
       </div>
       <p style={{textAlign:"center", backgroundColor:"#FAF5EA", padding:"10px 0", margin:'0'}}>© 2023 Mr. EzPz | All Rights Reserved  </p>
-    </div>
+      </>
   );
 }

@@ -23,7 +23,7 @@ export default function Story() {
           spacing={2}
           sx={{ justifyContent: "center", alignItems: "center" }}
         >
-          <Grid item lg={4} xs={12} sx={{padding:"0 30px"}}>
+          <Grid item lg={4} md={6} xs={12} sx={{padding:"0 30px"}}>
             <p className={styles.mini_title}>Story</p>
             {storyArray.map((val , key)=>(
  <div key={key}>
@@ -34,7 +34,7 @@ export default function Story() {
             <p className={styles.story_describe}>I hope through our time together, I can pass these flames on to you.</p>
            
           </Grid>
-          <Grid item lg={4} xs={12}><img src={myGif} className={styles.story_gif}/></Grid>
+          <Grid item lg={4} md={6} xs={12}><img src={myGif} className={styles.story_gif}/></Grid>
         </Grid>
       </div>
     </div>
