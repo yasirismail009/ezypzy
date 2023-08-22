@@ -11,57 +11,22 @@ import MermaidDiagram from "./Mermaid";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { Reveal } from "react-reveal";
-import { useScrollDirection } from "react-use-scroll-direction";
 import axios from "axios";
-import myGif from '../../assets/EzpZ-Fire.gif'
-
-// const [Thread, setThread] = useState([
-//   {
-//     title: "Lorem Ipsum is simply dummy text of the?",
-//     aires:
-//       "Consider each highlight a secret handshake between us - a sign from me to step in and lend a hand. But remember, there's no rush, we're here to enjoy the journey as much as the destination.  So take a deepbreath and when you're ready, let's jump in and make learning fun!",
-//     diagram: "",
-//     createDate: new Date("2022-07-20"),
-//   },
-//   {
-//     title: "Lorem Ipsum is simply dummy text of the 12?",
-//     aires:
-//       "Consider each highlight a secret handshake between us - a sign from me to step in and lend a hand. But remember, there's no rush, we're here to enjoy the journey as much as the destination.  So take a deepbreath and when you're ready, let's jump in and make learning fun! 122",
-//     diagram: "",
-//     createDate: new Date("2022-07-21"),
-//   },
-//   {
-//     title: "Lorem Ipsum is simply dummy text of the 12?",
-//     aires:
-//       "Consider each highlight a secret handshake between us - a sign from me to step in and lend a hand. But remember, there's no rush, we're here to enjoy the journey as much as the destination.  So take a deepbreath and when you're ready, let's jump in and make learning fun! 122",
-//     diagram: "",
-//     createDate: new Date("2022-07-22"),
-//   },
-//   {
-//     title: "Lorem Ipsum is simply dummy text of the 12?",
-//     aires: "",
-//     diagram: `
-//       graph TD;
-//     A-->B;
-//     A-->C;
-//     B-->D;
-//     C-->D;
-//       `,
-//     createDate: new Date("2022-07-22"),
-//   },
-// ]);
+import myGif from "../../assets/gif_data.gif";
+import Modal from "./Modal";
+import myGifUpload from "../../assets/EzPz_Upload.svg";
+import Slide from 'react-reveal/Slide';
 
 const PDFUploaded = () => {
   const messageContainerRef = useRef(null);
   const [lines, setLines] = useState();
   const [mermaidCode, setMermaidCode] = useState();
   const [Thread, setThread] = useState([]);
-  // const sortedThreads = Thread.sort((a, b) => b.createDate - a.createDate);
-
   const [currentLineIndex, setCurrentLineIndex] = useState(0);
   const [showDropDown, setShowDropDown] = useState(false);
   const [zoomOutLevel, setZoomOutLevel] = useState(0);
   const [fileData, setFileData] = useState();
+  const [searchHighlight, setSearchHighlight] = useState("");
   const [bgColor, setBgColor] = useState(
     "var(--colors-default-bg, linear-gradient(180deg, #FDA88F 0%, rgba(255, 223, 156, 0.60) 100%))"
   );
@@ -71,15 +36,29 @@ const PDFUploaded = () => {
 
   useEffect(() => {
     setFileData(JSON.parse(localStorage.getItem("doc_data")));
+    localStorage.setItem("themeColor","var(--colors-default-bg, linear-gradient(180deg, #FDA88F 0%, rgba(255, 223, 156, 0.60) 100%))")
     const handleResize = () => {
       setIsSmallScreen(window.innerWidth <= 768);
       if (window.innerWidth <= 768) {
         setFontScale(-4);
         setHighlighterKey(1691865075703);
-      } else {
+      } else if (window.innerWidth >768  && window.innerWidth <= 1024){
+        setFontScale(-3.5);
+        setHighlighterKey(1691865075707);
+      }else if (window.innerWidth >1024  && window.innerWidth <= 1440){
+        setFontScale(-1.3);
+        setHighlighterKey(1691865075707);
+      }else if (window.innerWidth >1440  && window.innerWidth <= 1920){
         setFontScale(-1);
+        setHighlighterKey(1691865075707);
+      }else if (window.innerWidth >1920 && window.innerWidth <= 2560){
+        setFontScale(1);
+        setHighlighterKey(1691865075707);
+      }else {
+        setFontScale(-1.3);
         setHighlighterKey(1691865998260);
       }
+      
       // Adjust the width threshold as needed
     };
 
@@ -95,6 +74,7 @@ const PDFUploaded = () => {
     };
   }, []);
 
+
   const scrollToBottom = () => {
     if (messageContainerRef.current) {
       const { scrollHeight, clientHeight } = messageContainerRef.current;
@@ -102,7 +82,13 @@ const PDFUploaded = () => {
       messageContainerRef.current.scrollTop = scrollHeight - clientHeight;
     }
   };
-
+  
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth' // You can use 'auto' instead of 'smooth' for instant scrolling
+    });
+  };
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -115,16 +101,31 @@ const PDFUploaded = () => {
   const [isCentered, setIsCentered] = useState(false);
   const [scrollScale, setScrollScale] = useState(1);
   const [opacityScale, setOpacityScale] = useState(1);
+  const [showDrawer, setShowDrawer] = useState(false);
   const [textAlign, setTextAlign] = useState("start");
   const [summeryData, setSummeryData] = useState("");
   const [showFields, setShowFields] = useState(false);
   const [loading, setLoading] = useState(false);
   const [activeHighlight, setActiveHighlight] = useState("");
-
+  const [modalMermaidCode, setModalMermaidCode] = useState("");
+  const [showTheme, setShowTheme] = useState(false);
+const [TypingTextState, setTypingTextState]= useState("")
   const [position, setPosition] = useState(50); // Initial position (percentage)
   const [typingKey, setTypingKey] = useState(0);
-
+  const [askedQuestion, setAskedQuestion] = useState("");
+  const [chatLoading, setChatLoading] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [threadHistory, setThreadHistory] = useState([]);
+  const [lastTeachHistory, setLastTeachHistory] = useState({});
+  const [lastChatHistory, setLastChatHistory] = useState({});
+  const [trackerList, setTrackerList] = useState([]);
+  const handleOpenModal = (mermaidCode) => {
+    setOpenModal(true);
+    setModalMermaidCode(mermaidCode);
+  };
+  const handleCloseModal = () => setOpenModal(false);
   const handleTypingDone = async () => {
+     setShowFields(true);
     scrollToBottom();
   };
   // Define event handlers
@@ -146,7 +147,7 @@ const PDFUploaded = () => {
     // Remove leading and trailing whitespace
     mermaidCode = mermaidCode.trim();
     const multiLineTemplate = `\`${mermaidCode}\``;
-    console.log("multiLineTemplate",multiLineTemplate)
+    console.log("multiLineTemplate", multiLineTemplate);
     return multiLineTemplate;
   }
   const handleMouseUp = () => {
@@ -191,25 +192,62 @@ const PDFUploaded = () => {
       }
     }, 1000); // Check if messageContainerRef is not null
   }
-
   const handleTechAndDiagram = (action, value) => {
-    if (value !== activeHighlight) {
-      setActiveHighlight(value);
+    setLines('')
+    if(trackerList.length===0){
+      setTrackerList([value])
+    }else{
+      setTrackerList([...trackerList,value])
     }
+    if(lastTeachHistory?.user_highlight){
+      setThread([
+        ...Thread,
+        {
+          main:lastTeachHistory.user_highlight,
+          aires: lastTeachHistory.TxtResponse,
+          dropDownData:lastTeachHistory.relatedQuestions,
+          createDate: Date.now(),
+          diagram: lastTeachHistory.mermaidCode ? lastTeachHistory.mermaidCode : "",
+        },
+      ]);
+      setLastTeachHistory({})
+    } else if(lastChatHistory?.message){
+      setThread([
+        ...Thread,
+        {
+          main:"",
+          title:askedQuestion,
+          aires: lastChatHistory.message,
+          dropDownData:lastChatHistory.relatedQuestions,
+          createDate: Date.now(),
+          diagram: "",
+        },
+      ]);
+      setLastChatHistory({})
+    }
+    setAskedQuestion('')
+    
+    
+    if (value !== activeHighlight) {
+      setActiveHighlight(value.content.text);
+      
+    } 
     if (value === "no data") {
       alert("Select Any Line from Pdf");
     } else {
       if (action === "teach") {
         setLoading(true);
+        setMermaidCode("")
         axios
           .get(
-            `https://api.mrezpz.ai/teachme?user_highlight=${value}&documentID=${fileData?.document_id}`
+            `https://api.mrezpz.ai/teachme?user_highlight=${value.content.text}&documentID=${fileData?.document_id}`
           )
           .then((res) => {
-            setShowDropDown(false)
+            setShowDropDown(false);
             setShowFields(false);
             setLines(res.data.TxtResponse);
             setDropDownData(res.data.relatedQuestions);
+            setLastTeachHistory(res.data)
           })
           .catch((err) => {
             console.log(err);
@@ -223,14 +261,15 @@ const PDFUploaded = () => {
         setLoading(true);
         axios
           .get(
-            `https://api.mrezpz.ai/visualize?user_highlight=${value}&documentID=${fileData?.document_id}&orginalFileExtension=${fileExtension}`
+            `https://api.mrezpz.ai/visualize?user_highlight=${value.content.text}&documentID=${fileData?.document_id}&orginalFileExtension=${fileExtension}`
           )
           .then((res) => {
-            setShowDropDown(false)
+            setShowDropDown(false);
             setShowFields(false);
             setLines(res.data.TxtResponse);
             setDropDownData(res.data.relatedQuestions);
-            setMermaidCode(convertToMultiLineTemplate(res.data?.mermaidJSCode));
+            setMermaidCode(res.data?.mermaidJSCode);
+            setLastTeachHistory(res.data)
           })
           .catch((err) => {
             console.log(err);
@@ -239,76 +278,88 @@ const PDFUploaded = () => {
             setLoading(false);
           });
       }
+    
     }
 
-    if (lines) {
+  };
+
+  const handleChat = (message) => {
+    setLines('')
+    if(lastTeachHistory?.user_highlight){
       setThread([
         ...Thread,
         {
-          title: activeHighlight,
-          aires: lines,
+          main:lastTeachHistory.user_highlight,
+          aires: lastTeachHistory.TxtResponse,
+          dropDownData:lastTeachHistory.relatedQuestions,
           createDate: Date.now(),
-          diagram: mermaidCode ? mermaidCode : "",
+          diagram: lastTeachHistory.mermaidCode ? lastTeachHistory.mermaidCode : "",
         },
       ]);
+      setLastTeachHistory({})
+    } else if(lastChatHistory?.message){
+      setThread([
+        ...Thread,
+        {
+          main:"",
+          title:askedQuestion,
+          aires: lastChatHistory.message,
+          dropDownData:lastChatHistory.relatedQuestions,
+          createDate: Date.now(),
+          diagram: "",
+        },
+      ]);
+      setLastChatHistory({})
     }
-  };
-  const handleChat = (message) => {
+    setAskedQuestion(message);
+    setMermaidCode("")
     const conversation_id = JSON.parse(localStorage.getItem("conversation_id"));
     if (conversation_id) {
-      setLoading(true);
+      setChatLoading(true)
       axios
         .get(
           `https://api.mrezpz.ai/chat?message=${message}&user_highlight=${activeHighlight}&documentID=${fileData?.document_id}&conversation_id=${conversation_id}`
         )
         .then((res) => {
-          setShowDropDown(false)
+          setShowDropDown(false);
           setShowFields(false);
           setLines(res.data.message);
           localStorage.setItem(
             "conversation_id",
             JSON.stringify(res.data.conversation_id)
           );
+          setDropDownData(res.data.relatedQuestions);
+          setLastChatHistory(res.data)
         })
         .catch((err) => {
           console.log(err);
         })
         .finally(() => {
-          setLoading(false);
+          setChatLoading(false);
         });
     } else {
+      setChatLoading(true)
       axios
         .get(
           `https://api.mrezpz.ai/chat?message=${message}&user_highlight=${activeHighlight}&documentID=${fileData?.document_id}`
         )
         .then((res) => {
-    
-          setShowDropDown(false)
+          setShowDropDown(false);
           setShowFields(false);
           setLines(res.data.message);
           localStorage.setItem(
             "conversation_id",
             JSON.stringify(res.data.conversation_id)
           );
+          setDropDownData(res.data.relatedQuestions);
+          setLastChatHistory(res.data)
         })
         .catch((err) => {
           console.log(err);
         })
         .finally(() => {
-          setLoading(false);
+          setChatLoading(false);
         });
-    }
-
-    if (lines) {
-      setThread([
-        ...Thread,
-        {
-          title: activeHighlight,
-          aires: lines,
-          createDate: Date.now(),
-          diagram: mermaidCode ? mermaidCode : "",
-        },
-      ]);
     }
   };
   useEffect(() => {
@@ -319,15 +370,19 @@ const PDFUploaded = () => {
       if (conversation_id) {
         localStorage.removeItem(conversation_id);
       }
+      if(Thread?.length>0){
+        setThreadHistory([...threadHistory,Thread])
+      }
     }
-  }, [setActiveHighlight]);
+  }, [activeHighlight]);
+
   const handleScroll = () => {
     if (messageContainerRef.current) {
       console.log(messageContainerRef.current.scrollTop);
       const newScale =
-        messageContainerRef.current.scrollTop < fullHeight ? 0.8 : 1;
+        messageContainerRef.current.scrollTop < 170 ? 0.8 : 1;
       const opacity =
-        messageContainerRef.current.scrollTop < fullHeight ? 0.6 : 1;
+        messageContainerRef.current.scrollTop < fullHeight ? 1 : 1;
       const alignItem =
         messageContainerRef.current.scrollTop < fullHeight ? "end" : "start";
 
@@ -339,46 +394,29 @@ const PDFUploaded = () => {
   };
   useEffect(() => {
     axios
-      .get("https://api.mrezpz.ai/mocked/summary?documentID=312")
+      .get(`https://api.mrezpz.ai/summary?documentID=${fileData?.document_id}`)
       .then((res) => {
         console.log(res);
-        setSummeryData(res.data.summaryResponse);
+        setSummeryData(res.data.generated_summary);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [fileData]);
   useEffect(() => {
     // Add the scroll event listener when the component mounts
     messageContainerRef.current?.addEventListener("scroll", handleScroll);
     // Function to check if the child is in the center of the parent
-    const checkCentered = () => {
-      // ... (same as the previous example)
-    };
-
-    // Attach the event listener to check for centering when the window is resized
-    window.addEventListener("resize", checkCentered);
-
-    // Initial check on mount
-    checkCentered();
 
     // Remove the scroll event listener when the component unmounts
     return () => {
-      window.removeEventListener("resize", checkCentered);
       messageContainerRef.current?.removeEventListener("scroll", handleScroll);
     };
   }, []);
   useEffect(() => {
-    if (lines) {
-      setTimeout(() => {
-        setShowFields(true);
-      }, 10000);
-    }
-    scrollToBottom()
+    scrollToBottom();
     setTypingKey((prevKey) => prevKey + 1);
   }, [lines]);
-  console.log(lines);
-  console.log(fileData);
   const [fontScale, setFontScale] = useState(1.0);
   const [highlighterKey, setHighlighterKey] = useState(Date.now());
 
@@ -393,17 +431,77 @@ const PDFUploaded = () => {
   };
   useEffect(() => {
     scrollToBottom();
-  }, [showDropDown, lines,Thread]);
+  }, [showDropDown, lines, Thread]);
 
+  useEffect(()=>{
+    if(searchHighlight){
+      handleTrackedata();
+    } else{
+      setThread([]);
+    }
+      
+  },[threadHistory])
+  useEffect(()=>{
+    if(searchHighlight){
+    
+      if(lastTeachHistory?.user_highlight){
+        const tempData = Thread
+        tempData.push( {
+          main:lastTeachHistory.user_highlight,
+          aires: lastTeachHistory.TxtResponse,
+          dropDownData:lastTeachHistory.relatedQuestions,
+          createDate: Date.now(),
+          diagram: lastTeachHistory.mermaidCode ? lastTeachHistory.mermaidCode : "",
+        })
+        setThreadHistory([...threadHistory, tempData])
+        setLastTeachHistory({})
+      } else if(lastChatHistory?.message){
+      
+        const tempData = Thread
+        tempData.push( {
+          main:"",
+          title:askedQuestion,
+          aires: lastChatHistory.message,
+          dropDownData:lastChatHistory.relatedQuestions,
+          createDate: Date.now(),
+          diagram: "",
+        })
+        setThreadHistory([...threadHistory, tempData])
+        setLastChatHistory({})
+      } else if(threadHistory?.length>0){
+        handleTrackedata()
+      }
+    }
+  },[searchHighlight])
+  const handleTrackedata=()=>{
+    let foundIndex = -1;
+    
+
+    for (let i = 0; i < threadHistory.length; i++) {
+      const innerArray = threadHistory[i];
+      const indexWithMain = innerArray.findIndex(item => item.main === searchHighlight);
+      
+      if (indexWithMain !== -1) {
+        foundIndex = i;
+        break;
+      }
+    }
+    if (threadHistory?.length>0){
+      
+      setThread(threadHistory[foundIndex])
+      const len= threadHistory[foundIndex].length
+      setLines('')
+      setDropDownData(threadHistory[foundIndex][len-1]?.dropDownData)
+      setShowFields(true)
+      setAskedQuestion('')
+      scrollToTop()
+    }
+ 
+  }
+  console.log(Thread)
+  console.log(threadHistory)
   return (
     <div className={styles.main_div} id="slider-container">
-      <div
-        className={styles.slider}
-        style={{ left: `${position}%` }}
-        onMouseDown={handleMouseDown}
-      >
-        <div className={styles.handle} />
-      </div>
       <div className={styles.sections_container}>
         <div
           className={
@@ -429,6 +527,20 @@ const PDFUploaded = () => {
             handleChat={handleChat}
             loading={loading}
             typingKey={typingKey}
+            setSearchHighlight={setSearchHighlight}
+            searchHighlight={searchHighlight}
+            bgColor={bgColor}
+            setShowDrawer={setShowDrawer}
+            showDrawer={showDrawer}
+            chatLoading={chatLoading}
+            askedQuestion={askedQuestion}
+            TypingTextState={TypingTextState}
+            setTypingTextState={setTypingTextState}
+            trackerList={trackerList}
+            handleOpenModal={handleOpenModal}
+            openModal={openModal}
+            handleCloseModal={handleCloseModal}
+            modalMermaidCode={modalMermaidCode}
           />
         </div>
         {isSmallScreen ? null : (
@@ -443,57 +555,95 @@ const PDFUploaded = () => {
             >
               <div className={styles.filters_box}>
                 {/* <BsRecordCircle size={15} /> */}
-                <AiOutlineFormatPainter size={18} onClick={handleClick} />
-                <Menu
-                  id="basic-menu"
-                  anchorEl={anchorEl}
-                  open={open}
-                  onClose={handleClose}
-                  MenuListProps={{
-                    "aria-labelledby": "basic-button",
+                <AiOutlineFormatPainter
+                  style={{
+                    marginBottom: showTheme ? "18px" : "5px",
+                    marginTop: "5px",
                   }}
-                >
-                  <MenuItem
-                    onClick={(e) => {
-                      setBgColor(
-                        "var(--colors-default-bg, linear-gradient(180deg, #FDA88F 0%, rgba(255, 223, 156, 0.60) 100%))"
-                      );
-                      handleClose();
-                    }}
-                  >
+                  size={18}
+                  onClick={(e) => {
+                    setShowTheme(!showTheme);
+                  }}
+                />
+                {showTheme ? (
+                  <>
                     <div
+                      onClick={(e) => {
+                        setBgColor(
+                          "var(--colors-default-bg, linear-gradient(180deg, #FDA88F 0%, rgba(255, 223, 156, 0.60) 100%))"
+                        );
+                        setShowTheme(!showTheme);
+                        localStorage.setItem("themeColor","var(--colors-default-bg, linear-gradient(180deg, #FDA88F 0%, rgba(255, 223, 156, 0.60) 100%))")
+                      }}
                       className={styles.dot}
                       style={{
-                        backgroundColor:
-                          "var(--aibg-1, rgba(196, 248, 183, 0.30))var(--colors-default-bg, linear-gradient(180deg, #FDA88F 0%, rgba(255, 223, 156, 0.60) 100%))",
+                        background:
+                          "var(--colors-default-bg, linear-gradient(180deg, #FDA88F 0%, rgba(255, 223, 156, 0.60) 100%))",
                       }}
                     ></div>
-                  </MenuItem>
-                  <MenuItem
-                    onClick={(e) => {
-                      setBgColor("var(--aibg-4, #ECFAFF)");
-                      handleClose();
-                    }}
-                  >
                     <div
+                      onClick={(e) => {
+                        setBgColor("#FFF");
+                        setShowTheme(!showTheme);
+                        localStorage.setItem("themeColor","#FFF")
+
+                      }}
                       className={styles.dot}
-                      style={{ backgroundColor: "var(--aibg-4, #ECFAFF)" }}
+                      style={{ background: "#FFF" }}
                     ></div>
-                  </MenuItem>
-                  <MenuItem
-                    onClick={(e) => {
-                      setBgColor("var(--aibg-5, #F3F1FA)");
-                      handleClose();
-                    }}
-                  >
                     <div
+                      onClick={(e) => {
+                        setBgColor("#E2FAD7");
+                        setShowTheme(!showTheme);
+                        localStorage.setItem("themeColor","#E2FAD7")
+
+                      }}
                       className={styles.dot}
-                      style={{ backgroundColor: "var(--aibg-5, #F3F1FA)" }}
+                      style={{ background: "#E2FAD7" }}
                     ></div>
-                  </MenuItem>
-                </Menu>
+                    <div
+                      onClick={(e) => {
+                        setBgColor("#FDF2E0");
+                        setShowTheme(!showTheme);
+                        localStorage.setItem("themeColor","#FDF2E0")
+                      }}
+                      className={styles.dot}
+                      style={{ background: "#FDF2E0" }}
+                    ></div>
+                    <div
+                      onClick={(e) => {
+                        setBgColor("#EFEFEF");
+                        setShowTheme(!showTheme);
+                        localStorage.setItem("themeColor","#EFEFEF")
+                      }}
+                      className={styles.dot}
+                      style={{ background: "#EFEFEF" }}
+                    ></div>
+                    <div
+                      onClick={(e) => {
+                        setBgColor("var(--aibg-4, #ECFAFF)");
+                        setShowTheme(!showTheme);
+                        localStorage.setItem("themeColor","#ECFAFF")
+                      }}
+                      className={styles.dot}
+                      style={{ background: "var(--aibg-4, #ECFAFF)" }}
+                    ></div>
+                    <div
+                      onClick={(e) => {
+                        setBgColor("var(--aibg-5, #F3F1FA)");
+                        setShowTheme(!showTheme);
+                        localStorage.setItem("themeColor","#F3F1FA")
+                      }}
+                      className={styles.dot}
+                      style={{ background: "var(--aibg-5, #F3F1FA)" }}
+                    ></div>
+                  </>
+                ) : null}
               </div>
-              <div className={styles.second_section_text}>
+              <div
+                className={styles.second_section_text}
+                style={{ marginTop: lines ? "-180px" : "0" }}
+              >
                 <div
                   ref={messageContainerRef}
                   className={styles.scrollView}
@@ -502,37 +652,48 @@ const PDFUploaded = () => {
                     transition: "transform 0.5s",
                     opacity: opacityScale,
                     transition: "transform 0.2s, opacity 0.2s",
+                    height: loading ? "100vh" : "90vh",
                   }}
                 >
                   {loading ? (
-                    <div className={styles.loadingstate}><img src={myGif} alt="Fire Gif" width="40%" /><p style={{fontSize:"22px"}}>Ai is loading...</p></div>
+                    <div className={styles.loadingstate}>
+                      <img src={myGif} alt="Fire Gif" width="15%" />
+                      {/* <p style={{ fontSize: "22px" }}>Ai is loading...</p> */}
+                    </div>
                   ) : (
                     <>
                       {Thread?.map((data, index) => (
                         <div className={styles.childDiv} key={index}>
-                          <div style={{height:"100%"}}>
-                            <p style={{ textAlign: `${textAlign}` }}>
-                              {index + 1}: <b>{data?.title}</b>
-                            </p>
+                          <div style={{ height: "100%" }}>
+                            <div  style={{width:"100%", display:'flex',justifyContent:'end', alignItems:'end'}}>
+                            <p className={styles.question} style={{textAlign:'start', width:"86%"}}>{data?.title}</p>
+                            </div>
                             {data?.diagram ? (
                               <div className={styles.mermaidData}>
                                 <MermaidDiagram
                                   diagramDefinition={data.diagram}
+                                  handleOpenModal={handleOpenModal}
                                 />
                               </div>
                             ) : null}
-                            <p>{data?.aires}</p>
+                            <p className={styles.typing}>{data?.aires}</p>
                           </div>
                         </div>
                       ))}
-                      {lines ? (
-                        <div className={styles.childDiv}>
+                      {lines || searchHighlight? (
+                        <div className={styles.childDivTypist}>
                           <div className={styles.mermaidData}>
                             {mermaidCode ? (
-                              <MermaidDiagram diagramDefinition={mermaidCode} />
+                              <MermaidDiagram
+                                diagramDefinition={mermaidCode}
+                                handleOpenModal={handleOpenModal}
+                              />
                             ) : null}
                           </div>
                           <div className={styles.fade_in_paragraph}>
+                          <Slide bottom>
+                            <p className={styles.question} style={{display:chatLoading?"none":"block"}}>{askedQuestion}</p>
+                            </Slide>
                             <span className={styles.fade_in_line}>
                               <Reveal effect="fadeIn">
                                 <Typist
@@ -554,13 +715,20 @@ const PDFUploaded = () => {
                               display: showFields ? "block" : "none",
                             }}
                           >
-                            <input
+                           <input
                               placeholder="Type here to ask"
                               type="text"
+                              value={TypingTextState}
                               className={styles.inputAi}
-                              style={{ background: bgColor }}
-                              onBlur={(e) => {
-                                handleChat(e.target.value);
+                              style={{ background: "transparent" }}
+                              onChange={(e) => {
+                                setTypingTextState(e.target.value);
+                              }}
+                              onKeyPress={(event) => {
+                                if (event.key === 'Enter') {
+                                  handleChat(TypingTextState);
+                                  setTypingTextState('');
+                                }
                               }}
                             ></input>
                             <div
@@ -569,6 +737,7 @@ const PDFUploaded = () => {
                                 textAlign: "start",
                                 display: "flex",
                                 alignItems: "center",
+                                justifyContent: "start",
                                 zIndex: 3,
                               }}
                               onClick={(e) => {
@@ -581,11 +750,17 @@ const PDFUploaded = () => {
                               <span>
                                 {showDropDown ? (
                                   <MdArrowDropUp
-                                    style={{ fontSize: "20px", margin: 0 }}
+                                    style={{
+                                      fontSize: "20px",
+                                      marginTop: "10px",
+                                    }}
                                   />
                                 ) : (
                                   <MdArrowDropDown
-                                    style={{ fontSize: "20px", margin: 0 }}
+                                    style={{
+                                      fontSize: "20px",
+                                      marginTop: "10px",
+                                    }}
                                   />
                                 )}
                               </span>
@@ -607,23 +782,40 @@ const PDFUploaded = () => {
                             ) : null}
                           </div>
                         </div>
-                      ) : (
+                      ) : Thread.length===0? (
                         <div className={styles.nodata}>
-                          <p>
-                          Document's ready!
-                          </p>
-                          <p>
-                          Highlight any text, and I'll step in to teach.
-                          </p>
+                          <div className={styles.nodata_text}>
+                            <div>
+                              <p>Document's ready!</p>
+                              <p>
+                                Highlight any text, and I'll step in to teach.
+                              </p>
+                            </div>
+                          </div>
+                          <div className={styles.gif_container}>
+                            <img
+                              src={myGifUpload}
+                              className={styles.gif_container_gif}
+                            />
+                          </div>
                         </div>
-                      )}
+                      ):null}
                     </>
                   )}
                 </div>
               </div>
+              <Modal
+                open={openModal}
+                handleClose={handleCloseModal}
+                handleOpen={handleOpenModal}
+                mermaidCode={modalMermaidCode}
+              />
             </div>
             {/* </Reveal> */}
-            <div className={styles.character_img}>
+            <div
+              className={styles.character_img}
+              style={{ display: lines || Thread.length>0 || threadHistory.length>0 ? "block" : "none" }}
+            >
               <EyesCom />
             </div>
           </>

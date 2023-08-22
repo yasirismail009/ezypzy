@@ -23,9 +23,7 @@
   padding: 0px 0 40px 0;
 }
 .home_image{
-  width: 10rem;
-  margin-right: 8rem;
-  margin-top: -2rem;
+width: 50%;
 }
 .flexData{
   display: flex;
@@ -33,6 +31,7 @@
   align-items: center;
   height: 100%;
   flex-direction: column;
+  padding: 0 20px;
 }
 .subBlock{
   display: flex;
@@ -62,8 +61,18 @@ margin: 0;
   margin: 0;
   text-align: start;
 }
+.flexDisplay{
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+
+}
 .blockDisplay{
   display: block;
+  width: 100%;
+
+
 }
 .paragraph{
   color: #0F172A;
@@ -71,14 +80,16 @@ font-family: IBM Plex Serif;
 font-size: 30px;
 font-style: normal;
 font-weight: 400;
-line-height: 120%; /* 36px */
+line-height: 0%; /* 36px */
 letter-spacing: -0.45px;
-margin: 0;
+margin-top: 51px;
+
 }
 .btn{
   display: inline-flex;
-margin-top: 10px;
-padding: 30px 70px;
+margin-top: 15px;
+height: 70px;
+padding: 20px 70px;
 flex-direction: column;
 align-items: center;
 border-radius: 50px;
@@ -95,11 +106,13 @@ font-style: normal;
 .story_div {
   width: 100%;
   height: 100%;
-  display: grid;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: relative;
   background-color: #F3EDDF;
   margin: 0;
-  padding: 60px 100px;
+  padding: 60px 0px;
 }
 .mini_title{
   color: #F96033;
@@ -113,31 +126,30 @@ padding-bottom: 15px;
 }
 .story_title{
   color: #0F172A;
-font-family: IBM Plex Serif;
-font-size: 32px;
-font-style: italic;
-font-weight: 600;
-line-height: 44px;
-line-height: normal;
+  font-family: IBM Plex Serif;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
 margin: 0;
 }
 .story_desc{
   color: #0F172A;
-  font-family: IBM Plex Serif;
-  font-size: 23px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 41px;
+font-family: IBM Plex Serif;
+font-size: 23px;
+font-style: normal;
+font-weight: 400;
+line-height: 34px;
   margin: 0;
   padding-bottom: 3rem;
 }
 .story_describe{
   color: #F96033;
-font-family: IBM Plex Serif;
-font-size: 25px;
-font-style: italic;
-font-weight: 500;
-line-height: 44px;
+  font-family: IBM Plex Serif;
+  font-size: 32px;
+  font-style: italic;
+  font-weight: 600;
+  line-height: 35px;
 }
 .story_gif{
   width: 100%;
@@ -147,55 +159,64 @@ line-height: 44px;
   justify-content:center ;
   align-items: center;
   height: 100%;
+  width: 95%;
 }
 
 .feature{
   width: 100%;
   height: 100%;
-  display: grid;
+  display: flex;
   position: relative;
+  justify-content:center ;
+  align-items: center;
   margin: 0;
-  padding: 60px 100px;
+  padding: 60px 0px;
 }
 .feature_title{
   color: #F96033;
-font-family: IBM Plex Serif;
-font-size: 20px;
-font-style: normal;
-font-weight: 500;
-line-height: normal;
-text-transform: uppercase;
+  font-family: IBM Plex Serif;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  text-transform: uppercase;
 }
 .feature_des{
   color: #0F172A;
-font-family: IBM Plex Serif;
-font-size: 40px;
-font-style: normal;
-font-weight: 700;
-line-height: 62px; /* 155% */
-letter-spacing: -0.6px;
+  font-family: IBM Plex Serif;
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal; /* 155% */
+  letter-spacing: -0.6px;
+  margin: 30px 0;
 }
 .feature_option_main{
-  color: #F96033;
   width: 80%;
-font-family: IBM Plex Serif;
-font-size: 25px;
-font-style: normal;
-font-weight: 400;
-line-height: normal;
+  color: #F96033;
+  font-family: IBM Plex Serif;
+  font-size: 25px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  cursor: pointer;
+  margin: 10px 0;
 }
 .features_option_parent{
   display: flex;
   flex-direction: column;
+  margin-top: 75px;
 }
 .feature_option{
-  color: #0F172A;
   width: 80%;
-font-family: IBM Plex Serif;
-font-size: 25px;
-font-style: normal;
-font-weight: 400;
-line-height: normal;
+  color: #0F172A;
+  font-family: IBM Plex Serif;
+  font-size: 25px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  cursor: pointer;
+  margin: 10px 0;
 }
 .feature_option_main:hover{
   color: #F96033;
@@ -208,6 +229,7 @@ font-weight: 600;
   display: flex;
   flex-direction: row;
   align-items: center;
+  margin: 10px 0;
 }
 .feature_notes{
   color: #0F172A;
@@ -215,10 +237,25 @@ font-family: IBM Plex Serif;
 font-size: 23px;
 font-style: normal;
 font-weight: 400;
+height: 120px;
 line-height: 34px; /* 147.826% */
+margin: 0;
 }
 .feature_gif{
-  width: 50%;
+  width: 40%;
+}
+.placeholder{
+  height: 350px;
+  background: #F3EDDF;
+}
+.footer{
+  color: #0F172A;
+  text-align: center;
+  font-family: IBM Plex Serif;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 44px; /* 338.462% */
 }
 
 @media (max-width: 768px) {
@@ -229,9 +266,8 @@ line-height: 34px; /* 147.826% */
     align-items: center;
   }
   .home_image{
-    width: 10rem;
-    margin:0;
-  }
+    width: 90%;
+    }
   .subHeading{
   font-size: 1.5rem;
   margin: 0;
@@ -239,6 +275,13 @@ line-height: 34px; /* 147.826% */
   .mainHeading{
     padding-top: 4rem;
     font-size: 4.875rem;
+  }
+  .flexDisplay{
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    text-align: center;
+    flex-direction: column;
   }
   .blockDisplay{
     justify-content: center;
@@ -250,80 +293,112 @@ line-height: 34px; /* 147.826% */
   .paragraph{
   font-size: 20px;
   margin: 0;
+  width: 60%;
+  text-align: center;
+  line-height: normal;
+  margin-top: 25px;
   }
   .btn{
-  margin-top: 20px;
-  padding: 20px 50px;
+  margin-top: 39px;
+  padding: 13px 85px;
+  height: 60px;
   }
   .story_div {
-    display: grid;
     margin: 0;
-    padding: 40px 20px;
+    padding: 40px 0;
     height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   .mini_title{
-  font-size: 25px;
+  font-size: 18px;
   }
   .story_title{
-  font-size: 25px;
+  font-size: 18px;
+  line-height: normal;
   }
-  .story_descr{
-    font-size: 20px;
+  .story_desc{
+    font-size: 16px;
+    line-height: normal;
+    padding-bottom: 2rem;
   }
   .story_describe{
-  font-size: 25px;
+  font-size: 18px;
+  line-height: normal;
   }
   .story_gif{
     width: 100%;
-  }
-  .home_image{
-    width: 40%;
-    top: 2rem;
-    right: 25%;
   }
   .features_option_parent{
     display: flex;
    flex-direction: row;
    overflow: scroll;
-   width: 18%;
+   margin: 0;
+  }
+  .features_option_parent::-webkit-scrollbar {
+    width: 0em;
+  }
+  
+  .features_option_parent::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+  
+  .features_option_parent::-webkit-scrollbar-thumb {
+    background-color: transparent;
   }
   .centerBlock{
     height: 100%;
+    width: 85%;
   }
   
   .feature{
-    display: grid;
     margin: 0;
-    padding: 40px 20px;
+    padding: 40px 0 0px 0;
     height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   .feature_title{
-  font-size: 20px;
+  font-size: 18px;
+  line-height: normal;
+  margin-bottom: -13px;
   }
   .feature_des{
     color: #0F172A;
   font-family: IBM Plex Serif;
-  font-size: 30px;
+  font-size: 18px;
   font-style: normal;
   font-weight: 700;
-  line-height: 32px; /* 155% */
+  line-height: normal;
   letter-spacing: -0.6px;
-  width: 22%;
+
   }
   .feature_option_main{
-  font-size: 22px;
+  font-size: 16px;
   width:max-content;
   background-color: #F3EDDF;
-  padding: 10px 20px 10px 20px;
-  margin: 0 10px;
+  display: flex;
+  height: 40px;
+  width: 250px;
+  padding: 10px 20px;
+  justify-content: center;
+  align-items: center;
   border-radius: 8px;
+  margin-right:10px;
   }
   .feature_option{
-  font-size: 22px;
+  font-size: 16px;
   width:max-content;
   background-color: #F3EDDF;
-  padding: 10px 20px 10px 20px;
-  margin: 0 10px;
+  display: flex;
+  width: 250px;
+  height: 40px;
+  padding: 10px 20px;
+  justify-content: center;
+  align-items: center;
+  margin-right:10px;
   border-radius: 8px;
   }
   .feature_icon{
@@ -331,14 +406,28 @@ line-height: 34px; /* 147.826% */
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    margin: 0;
   }
   .feature_notes{
-  font-size: 20px;
+  font-size: 16px;
  margin-top: 20px;
- width: 22%;
+ height: 100px;
+ line-height: normal;
   }
-  .feature_gif{
-    padding: 60px 59px;
-    width: 12%;
+  .placeholder{
+    width: 100%;
+    height: 350px;
+    background: #F3EDDF;
   }
+  .footer{
+    color: #0F172A;
+  text-align: center;
+  font-family: IBM Plex Serif;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 44px; /* 400% */
+  padding: 10px 0 10px 0px;
+  }
+  
 }

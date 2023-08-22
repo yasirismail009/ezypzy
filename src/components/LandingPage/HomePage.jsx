@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import styles from './Homepage.module.css'
-import Homepage from '../../assets/ExploreMode.gif'
+import Homepage from '../../assets/landing_page.svg'
 import { Link } from 'react-router-dom';
+import Landing from '../../assets/Header.svg'
 
 export default function HomePage() {
 
@@ -19,12 +20,13 @@ export default function HomePage() {
   return (
     <div className={styles.main_div}>
         <div className={styles.flexData}>
-            <div className={styles.blockDisplay}>
-              <div className={styles.subBlock}>
+            <div className={styles.flexDisplay}>
+              {/* <div className={styles.subBlock}>
             <p className={styles.subHeading}>Greetings, my name is</p>
             <img src={Homepage} className={styles.home_image}/>
             </div>
-         <h1 className={styles.mainHeading}>Mr.EzPz</h1>
+         <h1 className={styles.mainHeading}>Mr.EzPz</h1> */}
+         <img src={Landing} className={styles.home_image}/>
          </div>
          <p className={styles.paragraph}>I’m here to make learning easy peasy for you.</p>
          <Link to="/uploadFile">

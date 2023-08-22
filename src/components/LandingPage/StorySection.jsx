@@ -8,11 +8,11 @@ export default function Story() {
   const [storyArray, setStoryArray] = useState([
     {
       title: "I come from the high peaks of the Karakoram Mountains,",
-      descr: " but my love for learning sent me on a journey across the world. I began to travel to different corners of the world. ",
+      descr: "and my love for learning sent me on a journey to different corners of the world.",
     },
     {
-        title: "I discovered the rich histories of countless places,",
-        descr: "uncovered the scientific wonders and unique lifestyles across cultures along the way. Through this, I acquired the flame of knowledge.",
+        title: "I discovered the rich histories,",
+        descr: "uncovered scientific wonders and unique lifestyles, and acquired the flame of knowledge. I hope to pass these flames on to you.",
       },
   ]);
   return (
@@ -23,7 +23,7 @@ export default function Story() {
           spacing={2}
           sx={{ justifyContent: "center", alignItems: "center" }}
         >
-          <Grid item lg={4} md={6} xs={12} sx={{padding:"0 30px"}}>
+          <Grid item lg={6} md={6} xs={12} sx={{padding:"0 30px"}}>
             <p className={styles.mini_title}>Story</p>
             {storyArray.map((val , key)=>(
  <div key={key}>
@@ -31,7 +31,7 @@ export default function Story() {
  <p className={styles.story_desc}>{val.descr}</p>
 </div>
             ))}
-            <p className={styles.story_describe}>I hope through our time together, I can pass these flames on to you.</p>
+            <p className={styles.story_describe}>I hope to pass these flames on to you.</p>
            
           </Grid>
           <Grid item lg={4} md={6} xs={12}><img src={myGif} className={styles.story_gif}/></Grid>

@@ -1,15 +1,16 @@
-import React, {useRef, useState } from "react";
+import React, {useEffect, useRef, useState } from "react";
 import { BsRecordCircle } from "react-icons/bs";
 import { AiOutlineFormatPainter } from "react-icons/ai";
 import styles from "./UploadFile.module.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import myGif from '../../assets/EzpZ-Fire.gif'
+import myGif from '../../assets/EzPz_Upload.svg'
 import { RotatingLines } from "react-loader-spinner";
 
 const UploadFile = () => {
  const navigate = useNavigate()
   const fileInputRef = useRef(null);
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [loading, setLoading]= useState(false)
   const [bgColor, setBgColor] = useState(
     "var(--colors-default-bg, linear-gradient(180deg, #FDA88F 0%, rgba(255, 223, 156, 0.60) 100%))"
@@ -19,7 +20,23 @@ const UploadFile = () => {
   const handleUpload = () => {
     fileInputRef.current.click();
   };
+  useEffect(() => {
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth <= 768);
+      // Adjust the width threshold as needed
+    };
 
+    // Initial check
+    handleResize();
+
+    // Event listener for window resize
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup the event listener when the component is unmounted
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
 
   const handleFileUpload = async (event) => {
@@ -34,7 +51,16 @@ const UploadFile = () => {
       );
       return;
     } else{
-      uploadFile(file,fileExtension)
+      const fileSizeInBytes = file.size;
+      const fileSizeInKB = fileSizeInBytes / 1024;
+      const fileSizeInMB = fileSizeInKB / 1024;
+  
+      console.log("File size:", fileSizeInBytes, "bytes", fileSizeInKB.toFixed(2), "KB", fileSizeInMB.toFixed(2), "MB");
+      if(fileSizeInMB.toFixed(2)<=50){
+        uploadFile(file,fileExtension)
+      } else{
+        alert("File size is greater than 50 mb")
+      }
     }
 
   
@@ -47,7 +73,11 @@ const UploadFile = () => {
     axios.post("https://api.mrezpz.ai/process_document_upload/",formData).then((res)=>{
       localStorage.setItem("doc_data",JSON.stringify(res.data))
       localStorage.setItem("fileExtension",JSON.stringify(fileExtension))
-      navigate('/letstart')
+      if(isSmallScreen){
+        navigate('/letstart')
+      } else{
+        navigate('/viewPdf')
+      }
       setLoading(false)
     }).catch((err)=>{
       console.log(err)
@@ -86,76 +116,32 @@ const UploadFile = () => {
            
           </div>
           <p className={styles.pdf_format_only}>
-            PDF Format Only Not Exceeding 300 Mbs
+          PDF, PPTX, and DOCX Format Only Not Exceeding 50 MBs
           </p>
         </div>
       </div>
       <div className={styles.second_section}  style={{
                 background: bgColor,
               }}>
-        {/* <div className={styles.filters_box}>
-          <AiOutlineFormatPainter size={18} onClick={handleClick}/>
-          <Menu
-                  id="basic-menu"
-                  anchorEl={anchorEl}
-                  open={open}
-                  onClose={handleClose}
-                  MenuListProps={{
-                    "aria-labelledby": "basic-button",
-                  }}
-                >
-                  <MenuItem
-                    onClick={(e) => {
-                      setBgColor(
-                        "var(--colors-default-bg, linear-gradient(180deg, #FDA88F 0%, rgba(255, 223, 156, 0.60) 100%))"
-                      );
-                      handleClose();
-                    }}
-                  >
-                    <div
-                      className={styles.dot}
-                      style={{
-                        backgroundColor:
-                          "var(--aibg-1, rgba(196, 248, 183, 0.30))var(--colors-default-bg, linear-gradient(180deg, #FDA88F 0%, rgba(255, 223, 156, 0.60) 100%))",
-                      }}
-                    ></div>
-                  </MenuItem>
-                  <MenuItem
-                    onClick={(e) => {
-                      setBgColor("var(--aibg-4, #ECFAFF)");
-                      handleClose();
-                    }}
-                  >
-                    <div
-                      className={styles.dot}
-                      style={{ backgroundColor: "var(--aibg-4, #ECFAFF)" }}
-                    ></div>
-                  </MenuItem>
-                  <MenuItem
-                    onClick={(e) => {
-                      setBgColor("var(--aibg-5, #F3F1FA)");
-                      handleClose();
-                    }}
-                  >
-                    <div
-                      className={styles.dot}
-                      style={{ backgroundColor: "var(--aibg-5, #F3F1FA)" }}
-                    ></div>
-                  </MenuItem>
-                </Menu>
-        </div> */}
         <div className={styles.second_section_text}>
+          {isSmallScreen? <div className={styles.text_box}>
           <p>
-          "Your documents are the start; true learning is the goal. Let's get there together. 
+          Your documents are the start; true learning is the goal. Let's get there together. 
+          </p>
+          </div>: <div>
+          <p>
+          Your documents are the start; true learning is the goal. 
           </p>
           <p>
-          Upload your document to get started"
+          Let's get there together. 
           </p>
-          <img src={myGif} className={styles.story_gif}/>
+          </div>}
         </div>
+        <div className={styles.gif_container}>
+          <img src={myGif} className={styles.story_gif}/>
+          </div>
       </div>
     </div>
-    {/* } */}
     
     </>
   );

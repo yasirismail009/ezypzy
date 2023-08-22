@@ -2,16 +2,16 @@
 .container {
   display: flex;
   position: absolute!important;
-  bottom: 3.68rem;
-  right: 2.28rem;
+  bottom: 2.16rem;
+  right: 1.95rem;
   rotate: -14deg;
   background: transparent;
 }
 
 .container .eyes {
   position: relative;
-  width: 30px;
-  height: 30px;
+  width: 25px;
+  height: 25px;
   display: block;
   background-color: #fff;
   margin: 0 5px;
@@ -19,10 +19,11 @@
   box-shadow: 0 5px 45px rgba(0, 0, 0, 0.2), inset 0 0 15px #ffffff,
     inset 0 0 25px #ffffff;
 }
+
 .container .eyes::before {
   content: "";
   top: 50%;
-  left: 35px;
+  left: 22px;
   transform: translate(-75%, -50%);
   width: 14px;
   height: 14px;
@@ -33,7 +34,7 @@
   box-sizing: border-box;
 }
 .section {
-bottom: 14px;
+bottom: 18px;
 right: 0;
   position: absolute;
 }
@@ -57,7 +58,7 @@ right: 0;
   position: relative;
 }
 .image{
-  width: 170px;
+  width: 120px;
 }
 
 #myImage {

@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from "./Letstart.module.css";
-import myGif from '../../assets/EzpZ-Fire.gif'
+import myGif from '../../assets/EzPz_Upload.svg'
 import { useNavigate } from 'react-router-dom';
 
 export default function LetsStart() {
@@ -10,14 +10,18 @@ export default function LetsStart() {
        <div className={styles.second_section}>
         <div className={styles.second_child}>
     <p>
-    "Your documents are the start; true learning is the goal. Let's get there together. 
+    Document's ready!
     </p>
     <p>
-    Upload your document to get started"
+    Highlight any text, and I'll step in to teach.
     </p>
+    <div className={styles.btn_parent}>
     <button onClick={e=>{navigate('/viewpdf')}}>Let’s Start</button>
     </div>
+    </div>
+    <div className={styles.btn_parent}>
     <img src={myGif} className={styles.story_gif}/>
+    </div>
   </div></div>
   )
 }

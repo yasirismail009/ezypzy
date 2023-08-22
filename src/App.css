@@ -100,3 +100,47 @@ border: none !important;
   width: 100%;
   height: 100%;
 }
+.Highlight__parts .Highlight__part {
+  background-color: transparent !important; 
+  border-radius: 3px !important; /* Optional: Add border-radius for rounded corners */
+} 
+.Highlight--scrolledTo .Highlight__part{
+  background-color: var(--aibg-4, #e4e4e4) !important;
+}
+input:focus-visible {
+  outline: none; /* Remove the default outline */
+  border-color: transparent; /* Set the border color to transparent */
+  /* Add any additional styling you want for the focused state */
+}
+@media (max-width: 768px) {
+  .css-6s1xft-MuiGrid-root>.MuiGrid-item{
+    padding: 0 !important;
+  }
+  .css-6s1xft-MuiGrid-root{
+    width: 100% !important;
+    margin-left: 0px !important;
+   
+  }
+  .css-6sap9-MuiGrid-root>.MuiGrid-item{
+    padding-top: 0 !important;
+  }
+  .css-1gkl6l1-MuiGrid-root{
+    max-width: 99% !important;
+    padding: 0 !important;
+  }
+  .css-1kfhsve-MuiGrid-root{
+    max-width: 99% !important;
+    padding: 0 !important;
+  }
+  .css-9emuhu-MuiPaper-root-MuiDrawer-paper{
+    height: 75vh !important;
+    top: 28% !important;
+    border-radius: 25px;
+  }
+  .css-i9fmh8-MuiBackdrop-root-MuiModal-backdrop{
+    background-color: transparent !important;
+  }
+  .css-c18xrk-MuiModal-root-MuiDrawer-root{
+    background-color: transparent !important;
+  }
+}
