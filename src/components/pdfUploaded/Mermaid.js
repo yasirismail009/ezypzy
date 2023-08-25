@@ -1,42 +1,17 @@
-import React, { useRef, useEffect } from 'react';
-import mermaid from 'mermaid';
+import React from 'react';
+import { Mermaid } from 'mdx-mermaid/Mermaid';
+import he from 'he';
 
-const MermaidDiagram = ({ diagramDefinition, handleOpenModal }) => {
-  const mermaidRef = useRef(null);
-
-  useEffect(() => {
-    if (diagramDefinition) {
-      mermaid.initialize({
-        startOnLoad: true,
-        theme: 'default',
-        flowchart: {
-          // useMaxWidth: false,
-          // htmlLabels: true,
-        },
-      });
-
-      if (mermaidRef.current) {
-        mermaidRef.current.innerHTML = diagramDefinition;
-        mermaid.init(undefined, mermaidRef.current);
-      }
-
-      return () => {
-        if (mermaidRef.current) {
-          mermaid.unbind(mermaidRef.current);
-        }
-      };
-    }
-  }, [diagramDefinition]);
+const MermaidChatMessage = ({ diagramDefinition }) => {
+  const decodedDiagramDefinition = he.decode(diagramDefinition);
 
   return (
-    <div
-      ref={mermaidRef}
-      onClick={(e) => {
-        handleOpenModal(diagramDefinition);
-      }}
-      className="mermaid"
-    />
+    <div className="chat-message">
+      <div className="chat-bubble">
+        <Mermaid chart={decodedDiagramDefinition} />
+      </div>
+    </div>
   );
 };
 
-export default MermaidDiagram;
+export default React.memo(MermaidChatMessage);

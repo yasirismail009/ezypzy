@@ -11,8 +11,8 @@ export default function Story() {
       descr: "and my love for learning sent me on a journey to different corners of the world.",
     },
     {
-        title: "I discovered the rich histories,",
-        descr: "uncovered scientific wonders and unique lifestyles, and acquired the flame of knowledge. I hope to pass these flames on to you.",
+        title: "I discovered rich histories,",
+        descr: "uncovered scientific wonders and unique lifestyles, and acquired the flame of knowledge.",
       },
   ]);
   return (

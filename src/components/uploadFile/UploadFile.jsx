@@ -3,9 +3,9 @@ import { BsRecordCircle } from "react-icons/bs";
 import { AiOutlineFormatPainter } from "react-icons/ai";
 import styles from "./UploadFile.module.css";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import myGif from '../../assets/EzPz_Upload.svg'
 import { RotatingLines } from "react-loader-spinner";
+import { unauth } from "../../axios";
 
 const UploadFile = () => {
  const navigate = useNavigate()
@@ -70,8 +70,9 @@ const UploadFile = () => {
     const formData=  new FormData();
     formData.append("uploaded_file",file)
     formData.append("orginalFileExtension",fileExtension)
-    axios.post("https://api.mrezpz.ai/process_document_upload/",formData).then((res)=>{
+    unauth.post("/process_document_upload/",formData).then((res)=>{
       localStorage.setItem("doc_data",JSON.stringify(res.data))
+      localStorage.setItem("access_token",JSON.stringify(res.data.access_token))
       localStorage.setItem("fileExtension",JSON.stringify(fileExtension))
       if(isSmallScreen){
         navigate('/letstart')
@@ -116,7 +117,7 @@ const UploadFile = () => {
            
           </div>
           <p className={styles.pdf_format_only}>
-          PDF, PPTX, and DOCX Format Only Not Exceeding 50 MBs
+          PDF, PPTX, and DOCX format only. Not exceeding 50 Mbs
           </p>
         </div>
       </div>

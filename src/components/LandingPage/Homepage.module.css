@@ -99,6 +99,7 @@ color: #ebebeb;
 font-family: IBM Plex Serif;
 font-size: 30px;
 font-style: normal;
+cursor: pointer;
 }
 .btn.hovered {
   transform: scale(1.1);

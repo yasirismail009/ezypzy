@@ -105,7 +105,11 @@ border: none !important;
   border-radius: 3px !important; /* Optional: Add border-radius for rounded corners */
 } 
 .Highlight--scrolledTo .Highlight__part{
-  background-color: var(--aibg-4, #e4e4e4) !important;
+  background-color: var(--aibg-4, #d1f7c7) !important;
+  cursor: auto !important;
+}
+.Highlight__part{
+  cursor: auto !important;
 }
 input:focus-visible {
   outline: none; /* Remove the default outline */
@@ -141,6 +145,6 @@ input:focus-visible {
     background-color: transparent !important;
   }
   .css-c18xrk-MuiModal-root-MuiDrawer-root{
-    background-color: transparent !important;
+    background: transparent !important;
   }
 }

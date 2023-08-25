@@ -46,6 +46,7 @@
   justify-content: space-between;
   margin-top: 0px;
   width: 100%;
+  position: sticky;
 }
 .heading_section {
   display: flex;
@@ -64,9 +65,9 @@
   font-family: "IBM Plex serif", serif;
   font-size: 36px;
   font-weight: 400;
-  width: 200px;
+  width: 282px;
   border: none;
-  margin: 24px;
+  margin: 24px 0;
   padding-top: 15px;
 }
 
@@ -87,6 +88,7 @@
   background: var(--white, #fff);
   height: 27px;
   width: 27px;
+  cursor: pointer;
 }
 .highlight img {
   width: 15px;
@@ -195,7 +197,6 @@ text-transform: capitalize;
   font-style: normal;
   font-weight: 400;
   line-height: 24px; /* 171.429% */
-  text-transform: capitalize;
   margin: -8px 0px;
   height: 120px;
   overflow: scroll;
@@ -234,7 +235,7 @@ text-transform: capitalize;
   flex-direction: row;
   align-items: center;
   padding: 20px;
-  height: 100vh;
+  height: 80vh;
   overflow: scroll;
   /* background-color: red; */
 }
@@ -434,6 +435,7 @@ text-align: left;
   justify-content: space-evenly;
   position: absolute;
   width: 35px;
+  cursor: pointer;
   /* height: 27px; */
   background-color: white;
   border-radius: 5px;
@@ -487,9 +489,8 @@ text-align: left;
 .fade_in_paragraph {
   width: 100%;
   opacity: 0;
-  max-height: 75%;
   overflow: scroll;
-  animation: fadeIn 10s ease-in-out forwards;
+  animation: fadeIn 4s ease-in-out forwards;
 }
 .fade_in_paragraph::-webkit-scrollbar {
   width: 0em !important;
@@ -580,7 +581,7 @@ cursor: pointer;
 .scrollView{
   z-index: 1;
   overflow: scroll;
-  height: 83vh;
+
 }
 .scrollView::-webkit-scrollbar {
   width: 0em !important;
@@ -603,19 +604,29 @@ cursor: pointer;
 }
 .childDivTypist{
   width: 100%;
-  height: 70%;
+  height: 90%;
   display: flex;
   flex-direction: column;
   justify-content: start;
-  align-items: center;
+  align-items: start;
   padding-top: 155px;
 }
 .mermaidData{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  max-width: 300px;
+  max-height: 300px;
+  overflow: scroll;
   cursor: pointer;
+}
+.mermaidData::-webkit-scrollbar {
+  width: 0em !important;
+}
+
+.mermaidData::-webkit-scrollbar-track {
+  background-color: transparent !important;
+}
+
+.mermaidData::-webkit-scrollbar-thumb {
+  background-color: transparent !important;
 }
 .dot{
   width: 20px;

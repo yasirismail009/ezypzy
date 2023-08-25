@@ -98,7 +98,7 @@ export default function () {
           >
             <Grid item lg={7} md={8} xs={10} sx={{padding:"0 30px"}}>
               <div style={{width:"100%"}}>
-                <p className={styles.feature_title}>Feature</p>
+                <p className={styles.feature_title}>Features</p>
                 <p className={styles.feature_des}>
                   Let’s begin our journey of making learning{" "}
                   <span style={{ color: "#F96033", fontStyle:"italic" }}>easy peasy</span> for you.
@@ -253,12 +253,20 @@ export default function () {
            
             <Grid item lg={7} md={7} xs={12}>
                 <p className={styles.feature_notes}> 
-                {isHovered ? "Notes, articles, or powerpoint presentations.":
-                isHoveredData?"Highlight any piece of text, and I'll teach, explain, and simplify the content for better understanding":
-                isHoveredThird?"Watch complex concepts come to life with captivating diagrams, fostering deeper connections with information.":
-                isHoveredFour?"Learning is an ongoing conversation with me, where you can dig deeper, ask follow-up questions, and explore new ideas to stimulate critical thinking.":
-                isHoveredFive?"Revisit any of our interactions whenever you need, making it easier to recall what you have learned.":"Notes, articles, or powerpoint presentations."}
-</p>
+                {isHovered ? "Upload notes, articles, or presentations. Set the stage for a transformative learning experience.":null}
+                {isHoveredData?"Highlight any piece of text, and I'll teach, explain, and simplify the content for better understanding":null}
+                {isHoveredThird?"Watch complex concepts come to life with captivating diagrams, fostering deeper connections with information.":null}
+                {isHoveredFour?"Learning is an ongoing conversation with me, where you can dig deeper, ask follow-up questions, and explore new ideas to stimulate critical thinking.":null}
+                {isHoveredFive?"Revisit any of our interactions whenever you need, making it easier to recall what you have learned.":null}
+                {isHovered || isHoveredData || isHoveredThird || isHoveredFour || isHoveredFive ? null:<>
+                  {activeFeature==="Start by uploading a document"? "Upload notes, articles, or presentations. Set the stage for a transformative learning experience.":null}
+                {activeFeature==="Receive simplified explanations for your content"?"Highlight any piece of text, and I'll teach, explain, and simplify the content for better understanding":null}
+                {activeFeature==="Immerse in the visual learning experience"?"Watch complex concepts come to life with captivating diagrams, fostering deeper connections with information.":null}
+                {activeFeature==="Engage in dynamic dialogue"?"Learning is an ongoing conversation with me, where you can dig deeper, ask follow-up questions, and explore new ideas to stimulate critical thinking.":null}
+                {activeFeature==="Revisit and reinforce with ease"?"Revisit any of our interactions whenever you need, making it easier to recall what you have learned.":null}
+                </>}
+               
+</p>     
               <div className={styles.placeholder}></div>
             </Grid>
           </Grid>

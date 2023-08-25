@@ -51,6 +51,7 @@ margin-top: 12px;
   border-radius: 5px;
   border: 1px solid #cecece;
   background: var(--white, #fff);
+  cursor: pointer;
 }
 .highlighter img {
   width: 16px;
@@ -92,7 +93,6 @@ margin-top: 12px;
   font-style: normal;
   line-height: 24px;
   padding: 3px 11px 11px 11px;
-  text-transform: capitalize;
   margin-top: 10px;
   z-index: 3;
 
@@ -151,20 +151,20 @@ overflow: scroll;
 .bottomMenu {
   position: absolute;
   z-index: 999;
-  bottom: 5%;
+  bottom: 34%;
   width: 100%;
   
 }
 .submenu{
   display: flex;
-  justify-content: center;
-  align-items: center;
   width: 100%;
 }
 .footer_icons {
   display: flex;
   justify-content: start;
-  width: 100%;
+  flex-direction: column;
+  width:46px;
+  height: 70px;
   height: 45px;
   margin-left: 10px;
 }
@@ -192,17 +192,17 @@ margin: 0;
   background: var(--white, #fff);
 }
 .teach_icon {
-  border-radius: 25px 0px 0px 25px;
-  padding: 5px 14px 5px 18px;
+  border-radius: 25px 25px 0px 0px;
+  padding: 8px 4px 8px 4px;
 }
 .draw_icon {
-  border-radius: 0px 25px 25px 0px;
-  padding: 5px 18px 5px 14px;
+  border-radius: 0px 0px 25px 25px;
+  padding: 8px 4px 8px 4px;
 }
 .tracker_icon {
   border-radius: 25px;
-  margin-left: 7px;
-  padding: 5px 16px;
+  margin-top: 7px;
+  padding: 8px 16px;
 }
 .character_img {
   width: 100px;
@@ -230,10 +230,11 @@ margin: 0;
   padding: 30px;
   background: var(--colors-default-bg, linear-gradient(180deg, #FDA88F 0%, rgba(255, 223, 156, 0.60) 100%))
 }
+
 .second_section_text {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  align-items: center;
   text-align: start;
   font-family: "IBM Plex Sans", sans;
   font-size: 23px;
@@ -265,7 +266,7 @@ margin: 0;
   }
   .gif_container_gif{
     margin-top: 40px;
-    width: 100%;
+    width: 25%;
   }
   .question{
     color: #6C6C6C;
@@ -319,7 +320,7 @@ color: #2f2f2f; margin-bottom: 10px; font-size: 14px; font-family: IBM Plex Seri
   display:flex;
    flex-direction:column;
     width:100%;
-    height:100vh;
+    height:60vh;
      justify-content:center;
      align-items:center
 }
@@ -354,6 +355,7 @@ cursor: pointer;
   z-index: 1;
   overflow: scroll;
   height: 100vh;
+  margin: 30px 0px;
 }
 .scrollView::-webkit-scrollbar {
   width: 0em !important;
@@ -386,13 +388,13 @@ cursor: pointer;
   border-radius: 100px;
 }
 .menuIcon{
-  z-index: 1;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
   width: 35px;
-  /* height: 27px; */
+  cursor: pointer;
   background-color: white;
   border-radius: 5px;
   border: 1px solid #dfdfdf;
@@ -418,6 +420,7 @@ cursor: pointer;
   text-transform: capitalize;
 margin: 0;
 margin-bottom: 10px;
+text-align: start;
 }
 .tracker_highlights{
   color: #000;

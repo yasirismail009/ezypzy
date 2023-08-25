@@ -77,7 +77,7 @@ class PDFsection extends Component {
   }
 
 
-  toggleDrawer1 = (anchor, open, type, handleDiagram,searchHighlight) => (event) => {
+  toggleDrawer1 = (anchor, open, type, handleDiagram,searchHighlight,handleSearch) => (event) => {
     console.log(anchor, open);
     if (
       event &&
@@ -91,16 +91,18 @@ class PDFsection extends Component {
       handleDiagram(type, searchHighlight===""?this.state.highlights.length>0?  this.state.highlights[0]:"no data":searchHighlight)
     } else if(type==="tracker"){
       this.setState({...this.state, trackerView:true, [anchor]: open })
+      if(handleSearch){
+
+        handleSearch()
+      }
     } else{
       this.setState({...this.state, trackerView:false, [anchor]: open })
+
     }
   };  
-  updateHash = (highlight, setSearchHighlight,toggleDrawer1) => {
+  updateHash = (highlight, setSearchHighlight) => {
     document.location.hash = `highlight-${highlight.id}`;
     setSearchHighlight(highlight.content.text);
-    if(toggleDrawer1){
-      toggleDrawer1("bottom", false)();
-    }
   };
   toggleDrawer2 = (anchor, open) => (event) => {
     if (
@@ -191,12 +193,11 @@ class PDFsection extends Component {
     if(searchHighlight){
       setSearchHighlight("")
     }
-    console.log("Saving highlight", highlight);
 
     this.setState({
-      highlights: [{ ...highlight, id: getNextId() }, ...highlights],
+      highlights: [{ ...highlight, id: getNextId() }],
     });
-    console.log("Latest highlight index:", highlights.length - 1);
+
   }
  
   handleClick = (event) => {
@@ -265,6 +266,7 @@ class PDFsection extends Component {
       setSearchHighlight,
       searchHighlight,
       bgColor,
+      setBgColor,
       setShowDrawer,
       showDrawer,
       chatLoading,
@@ -276,6 +278,7 @@ class PDFsection extends Component {
       openModal,
       handleCloseModal,
       modalMermaidCode,
+      handleSearch
     } = this.props;
     return (
       <>
@@ -285,8 +288,8 @@ class PDFsection extends Component {
               <input
                 className={mobilestyles.heading}
                 defaultValue={
-                  fileData?.documentTitle?.length > 20
-                    ? fileData?.documentTitle.slice(0, 20) + "..."
+                  fileData?.documentTitle?.length > 15
+                    ? fileData?.documentTitle.slice(0, 15) + "..."
                     : fileData?.documentTitle
                 }
                 onBlur={(e) => {
@@ -321,7 +324,8 @@ class PDFsection extends Component {
               <div
                 className={mobilestyles.summary_section}
                 style={{display: showSummary ? "block" : "none",background:bgColor==="#FFF" || bgColor==="var(--colors-default-bg, linear-gradient(180deg, #FDA88F 0%, rgba(255, 223, 156, 0.60) 100%))"?"rgba(189, 189, 189, 0.30)":bgColor,
-                color:"#1d1d1d"}}
+                color:"#1d1d1d"
+              }}
               >
                 <p className={mobilestyles.summary_heading} style={{paddingTop:"7px"}}>Summary</p>
                 <p className={mobilestyles.summary_p}>
@@ -333,7 +337,35 @@ class PDFsection extends Component {
               </div>
               </Fade>
             </div>
-           
+            <div className={mobilestyles.bottomMenu}>
+              <div className={mobilestyles.submenu}>
+                <div className={mobilestyles.footer_icons}>
+                  <div
+                    className={mobilestyles.teach_icon}
+                    onClick={this.toggleDrawer1("bottom", true,"teach",handleTechAndDiagram,searchHighlight)}
+                  >
+                    <img src={teach} />
+                    <p>Teach</p>
+                  </div>
+                  <div
+                    className={mobilestyles.draw_icon}
+                    onClick={this.toggleDrawer1("bottom", true,"diagram",handleTechAndDiagram,searchHighlight)}
+                  >
+                    <img src={draw} />
+                    <p>Draw</p>
+                  </div>
+                  <div
+                    className={mobilestyles.tracker_icon}
+                    onClick={this.toggleDrawer1("bottom", true,"tracker",handleTechAndDiagram,searchHighlight,handleSearch)}
+                  >
+                    <img src={tracker} />
+                    <p>Tracker</p>
+                  </div>
+                </div>
+                  {/* <img src={myGif}/> */}
+                {/* <img className={mobilestyles.character_img} src={character} /> */}
+              </div>
+            </div>
           
             <div className={mobilestyles.footer}>
               <div
@@ -421,7 +453,9 @@ class PDFsection extends Component {
                     />
                   )}
                 </PdfLoader>
+                
               </div>
+
             </div>
             <DrawerData 
             toggleDrawer1={this.toggleDrawer1} 
@@ -447,37 +481,13 @@ class PDFsection extends Component {
             openModal={openModal}
             handleCloseModal={handleCloseModal}
             modalMermaidCode={modalMermaidCode}
+            bgColor={bgColor}
+            setBgColor={setBgColor}
+            handleSearch={handleSearch}
+            handleTechAndDiagram={handleTechAndDiagram}
              />
- <div className={mobilestyles.bottomMenu}>
-              <div className={mobilestyles.submenu}>
-                <div className={mobilestyles.footer_icons}>
-                  <div
-                    className={mobilestyles.teach_icon}
-                    onClick={this.toggleDrawer1("bottom", true,"teach",handleTechAndDiagram,searchHighlight)}
-                  >
-                    <img src={teach} />
-                    <p>Teach</p>
-                  </div>
-                  <div
-                    className={mobilestyles.draw_icon}
-                    onClick={this.toggleDrawer1("bottom", true,"diagram",handleTechAndDiagram,searchHighlight)}
-                  >
-                    <img src={draw} />
-                    <p>Draw</p>
-                  </div>
-                  <div
-                    className={mobilestyles.tracker_icon}
-                    onClick={this.toggleDrawer1("bottom", true,"tracker")}
-                  >
-                    <img src={tracker} />
-                    <p>Tracker</p>
-                  </div>
-                </div>
-                  {/* <img src={myGif}/> */}
-                {/* <img className={mobilestyles.character_img} src={character} /> */}
-              </div>
-            </div>
-            <div className={mobilestyles.distortion}></div>
+ 
+           {/* \ <div className={mobilestyles.distortion}></div> */}
 <SwipeableDrawer
   sx={{ maxHeight: "100vh", zIndex: 9999999 }}
   anchor={"bottom2"}
@@ -622,10 +632,10 @@ class PDFsection extends Component {
               </div>
             <div className={styles.pdf_section}>
              
-              <div className="App" style={{ display: "flex", height: "100vh" }}>
+              <div className="App" style={{ display: "flex", height: "100%" }}>
                 <div
                   style={{
-                    height: "100vh",
+                    height: "100%",
                     width: `${position-5}vw` ,
                     position: "relative",
                   }}

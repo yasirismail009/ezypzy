@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import mermaid from 'mermaid';
 
-const MermaidDiagram = ({ diagramDefinition,width,height}) => {
+const MermaidDiagram = ({ diagramDefinition,width, height,scale}) => {
   const mermaidRef = useRef(null);
 
   useEffect(() => {
@@ -24,7 +24,7 @@ const MermaidDiagram = ({ diagramDefinition,width,height}) => {
    
   }, [diagramDefinition]);
 
-  return <div style={{width:width,height:height, display:"flex", justifyContent:"center", alignItems:"center"}} ref={mermaidRef} className="mermaid" />;
+  return <div style={{width:{width}, height: {height}, transform: `scale(${scale})`}} ref={mermaidRef}  />;
 };
 
 export default MermaidDiagram;
