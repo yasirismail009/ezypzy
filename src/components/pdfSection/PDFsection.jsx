@@ -28,6 +28,7 @@ import styles from "../pdfUploaded/PDFUploaded.module.css";
 import mobilestyles from "../pdfMobile/PDFMobile.module.css";
 import myGif from '../../assets/mobile_menu.png'
 import DrawerData from "../pdfMobile/Drawer";
+import { RotatingLines } from "react-loader-spinner";
 
 const options = ["None", "Atria"];
 
@@ -58,6 +59,7 @@ const initialUrl = searchParams.get("url") || PRIMARY_PDF_URL;
 class PDFsection extends Component {
   constructor(props) {
     super(props);
+    this.addHighlight = this.addHighlight.bind(this);
     this.pdfHighlighterRef = createRef();
     this.state = {
       url: initialUrl,
@@ -100,10 +102,7 @@ class PDFsection extends Component {
 
     }
   };  
-  updateHash = (highlight, setSearchHighlight) => {
-    document.location.hash = `highlight-${highlight.id}`;
-    setSearchHighlight(highlight.content.text);
-  };
+ 
   toggleDrawer2 = (anchor, open) => (event) => {
     if (
       event &&
@@ -181,7 +180,13 @@ class PDFsection extends Component {
       false
     );
   }
-
+  updateHash = (highlight, setSearchHighlight) => {
+    this.setState({
+      highlights: [{...highlight}],
+    });
+    document.location.hash = `highlight-${highlight.id}`;
+    setSearchHighlight(highlight.content.text);
+  };
   getHighlightById(id) {
     const { highlights } = this.state;
 
@@ -189,17 +194,16 @@ class PDFsection extends Component {
   }
 
   addHighlight(highlight,searchHighlight,setSearchHighlight) {
-    const { highlights } = this.state;
+    // const { highlights } = this.state;
     if(searchHighlight){
       setSearchHighlight("")
     }
-
     this.setState({
       highlights: [{ ...highlight, id: getNextId() }],
     });
 
   }
- 
+
   handleClick = (event) => {
     this.setState({ anchorEl2: event.currentTarget });
   };
@@ -278,7 +282,9 @@ class PDFsection extends Component {
       openModal,
       handleCloseModal,
       modalMermaidCode,
-      handleSearch
+      handleSearch,
+      showFields,
+      summryLoading
     } = this.props;
     return (
       <>
@@ -328,9 +334,16 @@ class PDFsection extends Component {
               }}
               >
                 <p className={mobilestyles.summary_heading} style={{paddingTop:"7px"}}>Summary</p>
-                <p className={mobilestyles.summary_p}>
+                {summryLoading?<div> <RotatingLines
+                                strokeColor="grey"
+                                strokeWidth="5"
+                                animationDuration="0.75"
+                                width="30"
+                                visible={true}
+                              /></div>:<p className={mobilestyles.summary_p}>
                 {summeryData}
-                </p>
+                </p>}
+                
                 <div className={mobilestyles.hide_parent}>
                 <button onClick={this.handleToggleSummary}>Hide</button>
                 </div>
@@ -369,8 +382,9 @@ class PDFsection extends Component {
           
             <div className={mobilestyles.footer}>
               <div
+              className={mobilestyles.pdf_container}
                 style={{
-                  height: showSummary ? "67vh" : "86vh",
+                  height: showSummary ? "67vh" : "79vh",
                   width: "100%",
                   position: "relative",
                 }}
@@ -379,13 +393,15 @@ class PDFsection extends Component {
                   url={fileData?.documentURL}
                   ref={pdfHighlighterRef}
                   key={highlighterKey}
+                  
                   // beforeLoad={<div>loading...</div>}
                 >
                   {(pdfDocument) => (
                     <PdfHighlighter
                       pdfDocument={pdfDocument}
-                      enableAreaSelection={(event) => event.altKey}
+                      enableAreaSelection={(event) => event?.altKey}
                       onScrollChange={resetHash}
+                      textLayerMode="visible" // Corrected typo
                       pdfScaleValue={String(Math.pow(1.2, fontScale))}
                       scrollRef={(scrollTo) => {
                         this.scrollViewerTo = scrollTo;
@@ -398,7 +414,7 @@ class PDFsection extends Component {
                         transformSelection
                       ) => {
                         this.addHighlight({ content, position, comment: "" },searchHighlight,setSearchHighlight);
-                        // hideTipAndSelection();
+                        hideTipAndSelection();
                         transformSelection();
                       }}
                       highlightTransform={(
@@ -411,7 +427,7 @@ class PDFsection extends Component {
                         isScrolledTo
                       ) => {
                         const isTextHighlight = !Boolean(
-                          highlight.content && highlight.content.image
+                          highlight?.content && highlight?.content.image
                         );
 
                         const component = isTextHighlight ? (
@@ -485,6 +501,7 @@ class PDFsection extends Component {
             setBgColor={setBgColor}
             handleSearch={handleSearch}
             handleTechAndDiagram={handleTechAndDiagram}
+            addHighlight={this.addHighlight}
              />
  
            {/* \ <div className={mobilestyles.distortion}></div> */}
@@ -495,13 +512,13 @@ class PDFsection extends Component {
   onClose={this.toggleDrawer2("bottom2", false)}
   onOpen={this.toggleDrawer2("bottom2", true)}
 >
-  {highlights.map((val, key) => (
+  {highlights?.map((val, key) => (
     <p
       key={key}
       className={styles.menu_item_custom}
       onClick={() => this.updateHash(val)}
     >
-      {val.content.text.length > 15
+      {val?.content.text.length > 15
         ? val.content.text.slice(0, 15) + "..."
         : val.content.text}
     </p>
@@ -559,9 +576,16 @@ class PDFsection extends Component {
               // style={{  }}
             >
               <p className={styles.summary_heading}>Summary</p>
-              <p className={styles.summary}>
-               {summeryData}
-              </p>
+              {summryLoading?<div> <RotatingLines
+                                strokeColor="grey"
+                                strokeWidth="5"
+                                animationDuration="0.75"
+                                width="30"
+                                visible={true}
+                              /></div>: <p className={styles.summary}>
+                              {summeryData}
+                             </p>}
+             
               <div className={styles.hide_parent}>
               <button onClick={this.handleToggleSummary}>Hide</button>
               </div>
@@ -605,7 +629,7 @@ class PDFsection extends Component {
                   onClick={e=>{setShowDrawer(!showDrawer)}}
                   onMouseEnter={this.handleMouseEnterTracker}
                   onMouseLeave={this.handleMouseLeaveTracker}
-                  style={{minWidth:showDrawer?"297px":"20px",maxWidth:showDrawer?"297px":"20px",  justifyContent:showDrawer?"start":"center",border:showDrawer?"none":"1px solid #cecece",background:showDrawer?"#ffffff":"transparent", padding:showDrawer?"2px 6px":"10px 6px", boxShadow:showDrawer?"rgba(0, 0, 0, 0.16) 0px 1px 4px":"none"}}
+                  style={{minWidth:showDrawer?"297px":"20px",maxWidth:showDrawer?"297px":"20px",  justifyContent:showDrawer?"start":"center",border:showDrawer?"1px solid white":"1px solid #cecece",background:showDrawer?"#ffffff":"transparent", padding:showDrawer?"2px 6px":"10px 6px", boxShadow:showDrawer?"rgba(0, 0, 0, 0.16) 0px 1px 4px":"none"}}
                 >
                   <img src={rectangle} alt="Rectangle Icon" />
                   {showDrawer ? (
@@ -618,7 +642,7 @@ class PDFsection extends Component {
              
             >
               <p className={styles.tracker_title} style={{paddingTop:key===0?"40px":"0"}}  key={key}
-              onClick={() => this.updateHash(val,setSearchHighlight,searchHighlight)}><span style={{padding:"0px 7px"}}>{key+1} </span> {val.content.text.length > 32
+              onClick={() => this.updateHash(val,setSearchHighlight,searchHighlight)}><span style={{padding:"0px 7px"}}>{key+1} </span> {val?.content.text.length > 32
                 ? val.content.text.slice(0, 32) + "..."
                 : val.content.text}</p>
             
@@ -728,9 +752,6 @@ class PDFsection extends Component {
             </div>
           </div>
         )}
-
-    
-     
       </>
     );
   }

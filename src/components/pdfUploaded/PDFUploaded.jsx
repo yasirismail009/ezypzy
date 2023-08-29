@@ -21,6 +21,7 @@ import { motion } from 'framer-motion';
 
 import { Mermaid } from 'mdx-mermaid/Mermaid';
 import { authAxios } from "../../axios";
+import { RotatingLines } from "react-loader-spinner";
 
 const PDFUploaded = () => {
   const messageContainerRef = useRef(null);
@@ -47,7 +48,10 @@ const PDFUploaded = () => {
     const handleResize = () => {
       setIsSmallScreen(window.innerWidth <= 768);
       if (window.innerWidth <= 768) {
-        setFontScale(-4.8);
+        setFontScale(-5.8);
+        setHighlighterKey(1691865075703);
+      }else if (window.innerWidth <= 768) {
+        setFontScale(-4.5);
         setHighlighterKey(1691865075703);
       } else if (window.innerWidth >768  && window.innerWidth <= 1024){
         setFontScale(-3.5);
@@ -130,6 +134,7 @@ const [TypingTextState, setTypingTextState]= useState("")
   const [initialY, setInitialYY] = useState(0);
   const [historY, setHistorY] = useState(0);
   const [accessToken, setAccessToken] = useState(0);
+  const [summryLoading, setSummryLoading] = useState(false);
   console.log(scrollY)
   console.log(initialY)
   const handleScroll = () => {
@@ -243,7 +248,15 @@ const [TypingTextState, setTypingTextState]= useState("")
     if(trackerList.length===0){
       setTrackerList([value])
     }else{
-      setTrackerList([...trackerList,value])
+      if(value.content?.text){
+        if (trackerList.find(item => item.content.text === value.content.text)) {
+          // Handle case where value.content.text is not unique
+          alert('Duplicate text. Do not add to trackerList.');
+        } else {
+          setTrackerList([...trackerList, value]);
+        }
+      }
+ 
     }
     if(lastTeachHistory?.user_highlight){
       setThread([
@@ -281,12 +294,14 @@ const [TypingTextState, setTypingTextState]= useState("")
     if (value === "no data") {
       alert("Select Any Line from Pdf");
     } else {
+      const valueData=value.content?.text?value.content.text:searchHighlight
       if (action === "teach") {
         setLoading(true);
         setMermaidCode("")
+        
         authAxios
           .get(
-            `/teachme?user_highlight=${value.content.text}&documentID=${fileData?.document_id}`
+            `/teachme?user_highlight=${valueData}&documentID=${fileData?.document_id}`
           )
           .then((res) => {
             setShowDropDown(false);
@@ -308,7 +323,7 @@ const [TypingTextState, setTypingTextState]= useState("")
         setLoading(true);
         authAxios
           .get(
-            `/visualize?user_highlight=${value.content.text}&documentID=${fileData?.document_id}&orginalFileExtension=${fileExtension}`
+            `/visualize?user_highlight=${valueData}&documentID=${fileData?.document_id}&orginalFileExtension=${fileExtension}`
           )
           .then((res) => {
             setShowDropDown(false);
@@ -332,7 +347,15 @@ const [TypingTextState, setTypingTextState]= useState("")
   };
 
   const handleChat = (message) => {
-setLines('loading...')
+    if(searchHighlight){
+      setSearchHighlight('')
+    }
+    const trimmedValue = message.trim();
+    if (trimmedValue === '' || trimmedValue === '"' ||trimmedValue === '" "' ||trimmedValue === '""'  ) {
+      message = ''; // Clear the input field
+      alert("Invalid input! Please enter valid text.");
+    } else{
+setLines('|')
     if(lastTeachHistory?.user_highlight){
       setThread([
         ...Thread,
@@ -417,6 +440,7 @@ setLines('loading...')
           setChatLoading(false);
         });
     }
+  }
   };
   useEffect(() => {
     if (activeHighlight) {
@@ -435,7 +459,9 @@ setLines('loading...')
 
   
   useEffect(() => {
-    authAxios
+    if(fileData?.document_id){
+      setSummryLoading(true)
+       authAxios
       .get(`/summary?documentID=${fileData?.document_id}`)
       .then((res) => {
         console.log(res);
@@ -443,7 +469,11 @@ setLines('loading...')
       })
       .catch((err) => {
         console.log(err);
-      });
+      }).finally(()=>{
+        setSummryLoading(false)
+      })
+    }
+   
   }, [fileData]);
 
 
@@ -581,6 +611,8 @@ setLines('loading...')
             handleCloseModal={handleCloseModal}
             modalMermaidCode={modalMermaidCode}
             handleSearch={handleSearch}
+            showFields={showFields}
+            summryLoading={summryLoading}
           />
         </div>
         {isSmallScreen ? null : (
@@ -690,7 +722,7 @@ setLines('loading...')
                         ref={messageContainerRef}
                   className={styles.scrollView}
                   style={{
-                    transform: scrollY<initialY && lastChatHistory.message? `scale(0.8)`: `scale(1)`,
+                    transform: scrollY<initialY && lines? `scale(0.8)`: `scale(1)`,
                     transition: "transform 2s",
                     opacity: opacityScale,
                     transition: "transform 0.2s, opacity 0.2s",
@@ -705,25 +737,26 @@ setLines('loading...')
                   ) : (
                     <>
                     {Thread.length>0?
-                    Thread?.map((data, index) => (
-                      <div className={styles.childDiv} key={index}>
-                        <div style={{ height: "100%" }}>
-                          <div  style={{width:"100%", display:'flex',justifyContent:'end', alignItems:'end'}}>
-                          <p className={styles.question} style={{textAlign:'start', width:"86%"}}>{data?.title}</p>
-                          </div>
-                          {data?.diagram !==""? (
-                            <div className={styles.mermaidData}   onClick={e=>{handleOpenModal(data?.diagram)}}>
-                              <MermaidChatMessage
-                              key={data?.diagram}
-                                diagramDefinition={data?.diagram}
-                              
-
-                              />
-                            </div>
-                          ) : null}
-                          <p className={styles.typing}>{data?.aires}</p>
+                    Thread.map((data, index) => (
+                      Thread.length-1===index && searchHighlight?null: <div className={styles.childDiv} key={index}>
+                      <div style={{ height: "90%" }}>
+                        <div  style={{width:"100%", display:'flex',justifyContent:'end', alignItems:'end'}}>
+                        <p className={styles.question} style={{textAlign:'end', width:"86%"}}>{data?.title}</p>
                         </div>
+                        {data?.diagram !==""? (
+                          <div className={styles.mermaidData}   onClick={e=>{handleOpenModal(data?.diagram)}}>
+                            <MermaidChatMessage
+                            key={data?.diagram}
+                              diagramDefinition={data?.diagram}
+                            
+
+                            />
+                          </div>
+                        ) : null}
+                        <p className={styles.typing}>{data?.aires}</p>
                       </div>
+                    </div>
+                     
                     )):null
                     }
                       
@@ -738,7 +771,14 @@ setLines('loading...')
                           </div>
                             ) : null}
                           <Slide bottom>
+                            <>
                             <p className={styles.question}>{askedQuestion}</p>
+                            {chatLoading?<RotatingLines   strokeColor="grey"
+  strokeWidth="5"
+  animationDuration="0.75"
+  width="20"
+  visible={true}/>:null}
+  </>
                             </Slide>
                           <div className={styles.fade_in_paragraph}>
                             <span className={styles.fade_in_line}>
@@ -749,6 +789,7 @@ setLines('loading...')
                                   cursor={{ hideWhenDone: true }}
                                   className={styles.typing}
                                   onTypingDone={handleTypingDone}
+                                  onLineTyped={scrollToBottom}
                                 >
                                   {lines}
                                 </Typist>
@@ -787,14 +828,16 @@ setLines('loading...')
                                 justifyContent: "start",
                                 zIndex: 3,
                               }}
-                              onClick={(e) => {
-                                setShowDropDown(!showDropDown);
-                              }}
+                            
                             >
-                              <span className={styles.dropDown}>
-                                Questions you may want to ask{" "}
+                              <span className={styles.dropDown}   onClick={(e) => {
+                                setShowDropDown(!showDropDown);
+                              }}>
+                                Topics you may want to explore{" "}
                               </span>
-                              <span>
+                              <span   onClick={(e) => {
+                                setShowDropDown(!showDropDown);
+                              }}>
                                 {showDropDown ? (
                                   <MdArrowDropUp
                                     style={{

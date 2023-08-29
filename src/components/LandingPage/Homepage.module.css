@@ -100,8 +100,24 @@ font-family: IBM Plex Serif;
 font-size: 30px;
 font-style: normal;
 cursor: pointer;
+border: none;
+text-decoration: none;
+outline: none;
 }
-.btn.hovered {
+.btn:focus {
+  outline: none !important;
+  border: none !important;
+}
+.btn:focus-visible {
+  outline: none !important;
+  border: none !important;
+}
+.btn:hover {
+  outline: none !important;
+  border: none !important;
+}
+.hovered {
+ 
   transform: scale(1.1);
 }
 .story_div {

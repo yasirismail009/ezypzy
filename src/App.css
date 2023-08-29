@@ -100,15 +100,12 @@ border: none !important;
   width: 100%;
   height: 100%;
 }
-.Highlight__parts .Highlight__part {
-  background-color: transparent !important; 
-  border-radius: 3px !important; /* Optional: Add border-radius for rounded corners */
-} 
+
 .Highlight--scrolledTo .Highlight__part{
-  background-color: var(--aibg-4, #d1f7c7) !important;
   cursor: auto !important;
 }
 .Highlight__part{
+  color: #61dafb;
   cursor: auto !important;
 }
 input:focus-visible {
@@ -136,15 +133,28 @@ input:focus-visible {
     max-width: 99% !important;
     padding: 0 !important;
   }
-  .css-9emuhu-MuiPaper-root-MuiDrawer-paper{
-    height: 75vh !important;
-    top: 28% !important;
-    border-radius: 25px;
-  }
   .css-i9fmh8-MuiBackdrop-root-MuiModal-backdrop{
     background-color: transparent !important;
   }
   .css-c18xrk-MuiModal-root-MuiDrawer-root{
     background: transparent !important;
   }
+  .css-9emuhu-MuiPaper-root-MuiDrawer-paper{
+    height: 100vh !important;
+  }
+
+  
+}
+* {
+  user-select: text !important;
+}
+
+.textLayer{
+
+  width: 100%;
+  height: 100%;
+  user-select: text !important; /* Allow only text selection */
+}
+.textLayer span, .textLayer br{
+  user-select: text !important; /* Allow only text selection */
 }

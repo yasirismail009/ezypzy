@@ -72,6 +72,9 @@ margin-top: 12px;
   font-family: "IBM Plex sans", sans;
   z-index: 999999;
 }
+/* .pdf_container{
+  user-select: text; /* Allow text selection */
+/* } */ 
 .small_A {
   font-size: 12px;
   font-weight: 500;
@@ -116,7 +119,7 @@ height: 140px;
 overflow: scroll;
 }
 .summary_p::-webkit-scrollbar {
-  width: 0em !important;
+  width: -1em !important;
 }
 
 .summary_p::-webkit-scrollbar-track {
@@ -131,6 +134,7 @@ overflow: scroll;
   display: flex;
   justify-content: start;
   align-items: start;
+  margin: 10px 0;
 }
 .hide_parent button {
   width: 55px;
@@ -294,7 +298,7 @@ font-weight: 400;
 line-height: 25px; /* 178.571% */
 }
 .inputAi{
-width: 98%; 
+width: 90%; 
 color: #2f2f2f; margin-bottom: 10px; font-size: 14px; font-family: IBM Plex Serif; font-weight: 400; line-height: 27px; word-wrap: break-word;
   z-index: 1;
   border: none;
@@ -356,6 +360,7 @@ cursor: pointer;
   overflow: scroll;
   height: 100vh;
   margin: 30px 0px;
+  width: 88%;
 }
 .scrollView::-webkit-scrollbar {
   width: 0em !important;

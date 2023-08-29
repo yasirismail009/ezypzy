@@ -42,7 +42,7 @@ const UploadFile = () => {
   const handleFileUpload = async (event) => {
     const file = event.target.files[0];
    
-    const fileExtension = file.name.split(".").pop().toLowerCase();
+    const fileExtension = file?.name.split(".").pop().toLowerCase();
 
     const supportedFormats = ["doc", "docx", "pptx", "ppt", "pdf"];
     if (!supportedFormats.includes(fileExtension)) {
@@ -51,7 +51,7 @@ const UploadFile = () => {
       );
       return;
     } else{
-      const fileSizeInBytes = file.size;
+      const fileSizeInBytes = file?.size;
       const fileSizeInKB = fileSizeInBytes / 1024;
       const fileSizeInMB = fileSizeInKB / 1024;
   

@@ -202,7 +202,7 @@ text-transform: capitalize;
   overflow: scroll;
 }
 .summary::-webkit-scrollbar {
-  width: 0em !important;
+  width: -1em !important;
 }
 
 .summary::-webkit-scrollbar-track {
@@ -532,6 +532,7 @@ line-height: 25px; /* 178.571% */
   z-index: 1;
   border: none;
   margin-bottom: 10px;
+  margin-left: -3px;
 }
 .inputAi:hover {
   border:none; /* Replace this with the desired hover border color */
@@ -548,6 +549,7 @@ font-size: 14px;
 font-style: normal;
 font-weight: 600;
 line-height: 17px; /* 192.857% */
+margin-top: 20px;
 }
 .dropDown{
   color: #000;
@@ -609,7 +611,7 @@ cursor: pointer;
   flex-direction: column;
   justify-content: start;
   align-items: start;
-  padding-top: 155px;
+  padding-top: 70px;
 }
 .mermaidData{
   max-width: 300px;

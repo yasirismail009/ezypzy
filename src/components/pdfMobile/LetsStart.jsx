@@ -22,6 +22,7 @@ export default function LetsStart() {
     <div className={styles.btn_parent}>
     <img src={myGif} className={styles.story_gif}/>
     </div>
-  </div></div>
+  </div>
+  </div>
   )
 }
