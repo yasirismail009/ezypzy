@@ -199,19 +199,26 @@ text-transform: capitalize;
   line-height: 24px; /* 171.429% */
   margin: -8px 0px;
   height: 120px;
-  overflow: scroll;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 .summary::-webkit-scrollbar {
-  width: -1em !important;
+  width: 10x;
 }
 
 .summary::-webkit-scrollbar-track {
-  background-color: transparent !important;
+  background: rgba(46, 46, 46, 0.3);
 }
 
 .summary::-webkit-scrollbar-thumb {
-  background-color: transparent !important;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
 }
+
+.summary::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
 .hide_parent{
   display: flex;
   justify-content: end;
@@ -288,6 +295,7 @@ text-transform: capitalize;
   justify-content: center;
   padding: 10px 6px;
   max-width: 40px;
+  min-height: 17px;
   border: 1px solid #cecece;
   background-color: white;
   border-radius: 15px 15px 15px 15px;
@@ -531,8 +539,7 @@ line-height: 25px; /* 178.571% */
   color: #2f2f2f; font-size: 14px; font-family: IBM Plex Serif; font-weight: 400; line-height: 27px; word-wrap: break-word;
   z-index: 1;
   border: none;
-  margin-bottom: 10px;
-  margin-left: -3px;
+ 
 }
 .inputAi:hover {
   border:none; /* Replace this with the desired hover border color */
@@ -540,7 +547,7 @@ line-height: 25px; /* 178.571% */
 
 /* Change placeholder color on hover */
 .custom-input:hover::placeholder {
-  color: #ACACAC; /* Replace this with the desired hover placeholder color */
+  color: #292929; /* Replace this with the desired hover placeholder color */
 }
 .question{
   color: #6C6C6C;
@@ -614,7 +621,6 @@ cursor: pointer;
   padding-top: 70px;
 }
 .mermaidData{
-  max-width: 300px;
   max-height: 300px;
   overflow: scroll;
   cursor: pointer;

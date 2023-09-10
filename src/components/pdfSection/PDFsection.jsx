@@ -306,9 +306,18 @@ class PDFsection extends Component {
               <div className={mobilestyles.summary_edit_section} style={{display: showSummary ? "none" : "flex"}}>
                 <button style={{background:"#1d1d1d"}} onClick={this.handleToggleSummary}>Summary</button>
                 <div className={mobilestyles.edit_section}>
+                <div className={mobilestyles.text_view_section}>
+                    <p
+                      className={mobilestyles.viewSet}
+                      onClick={this.toggleDrawer1("bottom", true)}
+                    >
+                      Mr EzPz
+                    </p>
+                  </div>
                   <div className={mobilestyles.highlighter}>
                     <img src={highlighticon} />
                   </div>
+                  
                   {/* <div className={mobilestyles.text_edit_section}>
                     <p
                       className={mobilestyles.small_A}
@@ -642,10 +651,9 @@ class PDFsection extends Component {
              
             >
               <p className={styles.tracker_title} style={{paddingTop:key===0?"40px":"0"}}  key={key}
-              onClick={() => this.updateHash(val,setSearchHighlight,searchHighlight)}><span style={{padding:"0px 7px"}}>{key+1} </span> {val?.content.text.length > 32
-                ? val.content.text.slice(0, 32) + "..."
+              onClick={() => this.updateHash(val,setSearchHighlight,searchHighlight)}><span style={{padding:"0px 7px"}}>{key+1} </span> {val?.content.text.length > 20
+                ? val.content.text.slice(0, 20) + "..."
                 : val.content.text}</p>
-            
             </div>
           ))}
                 

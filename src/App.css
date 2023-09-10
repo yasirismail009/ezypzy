@@ -103,9 +103,12 @@ border: none !important;
 
 .Highlight--scrolledTo .Highlight__part{
   cursor: auto !important;
+  background-color: transparent !important;
+  background: transparent !important;
 }
 .Highlight__part{
-  color: #61dafb;
+  background: transparent !important;
+  color: #61dafb !important;
   cursor: auto !important;
 }
 input:focus-visible {
@@ -142,7 +145,9 @@ input:focus-visible {
   .css-9emuhu-MuiPaper-root-MuiDrawer-paper{
     height: 100vh !important;
   }
-
+  .css-1e4sykn{
+    padding: 0 !important;
+  }
   
 }
 * {

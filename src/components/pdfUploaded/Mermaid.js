@@ -14,4 +14,4 @@ const MermaidChatMessage = ({ diagramDefinition }) => {
   );
 };
 
-export default React.memo(MermaidChatMessage);
+export default MermaidChatMessage;

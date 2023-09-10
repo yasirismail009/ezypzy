@@ -1,0 +1,66 @@
+
+.container2 {
+  display: flex;
+  position: absolute!important;
+  bottom: 3.06rem;
+  right: 1.95rem;
+  rotate: -14deg;
+  background: transparent;
+}
+
+.container2 .eyes2 {
+  position: relative;
+  width: 25px;
+  height: 25px;
+  display: block;
+  background-color: #fff;
+  margin: 0 5px;
+  border-radius: 50%;
+  box-shadow: 0 5px 45px rgba(0, 0, 0, 0.2), inset 0 0 15px #ffffff,
+    inset 0 0 25px #ffffff;
+}
+
+.container2 .eyes2::before {
+  content: "";
+  top: 50%;
+  left: 22px;
+  transform: translate(-75%, -50%);
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #ffffff;
+  position: absolute;
+  border: 6px solid #202020;
+  box-sizing: border-box;
+}
+.section2 {
+bottom: 18px;
+right: 0;
+  position: absolute;
+}
+
+.main2 {
+  /* background: url("/images/bg.jpg") no-repeat; */
+  background-size: cover;
+  height: 90%;
+  width: 100%;
+  display: flex;
+}
+.right2 {
+  width: 80vh;
+  height: 100vw;
+  position: relative;
+  display: flex;
+  justify-content: end;
+  align-items: end;
+}
+.img2{
+  position: relative;
+}
+.image2{
+  width: 120px;
+}
+
+#myImage2 {
+  transition: opacity 1s ease-in;
+}

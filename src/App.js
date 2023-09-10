@@ -4,7 +4,7 @@ import UploadFile from './components/uploadFile/UploadFile';
 import ViewPdf from './components/pdfUploaded/PDFUploaded';
 import LetsStart from './components/pdfMobile/LetsStart';
 import Index from './components/LandingPage/Index';
-import Annotations from './components/uploadFile/MyPDFViewer';
+import Login from './components/LandingPage/Login';
 
 
 function App() {
@@ -17,7 +17,7 @@ function App() {
         <Route exact path="/uploadFile" element={<UploadFile />} />
         <Route path="/viewPdf" element={<ViewPdf/>} />
         <Route path="/letstart" element={<LetsStart/>} />
-        <Route path="/test" element={<Annotations/>} />
+        <Route path="/login" element={<Login/>} />
       </Routes>
     </Router>
    </>

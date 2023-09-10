@@ -109,9 +109,9 @@ export default function () {
           <Grid
             container
             spacing={1}
-            sx={{ justifyContent: "start", alignItems: "center"  }}
+            sx={{ justifyContent: "start", alignItems: "center" ,width:'100vw'  }}
           >
-           <Grid item lg={5} md={6} xs={11} sx={{ padding: "0 30px" }}>
+           <Grid item lg={5} md={6} xs={11} sx={{ padding: "0 0px" , width:'100%'}}>
               <div className={styles.features_option_parent}>
               <div
                 className={styles.feature_icon}

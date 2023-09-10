@@ -6,6 +6,7 @@ import { AiOutlineFormatPainter } from "react-icons/ai";
 import PDFsection from "../pdfSection/PDFsection";
 import Typist from "react-typist";
 import EyesCom from "./EyesAnimation";
+import EyesCom2 from "./EyesAnimation2";
 import { MdArrowDropDown, MdArrowDropUp } from "react-icons/md";
 import MermaidChatMessage from "./Mermaid";
 import Menu from "@mui/material/Menu";
@@ -16,8 +17,6 @@ import myGif from "../../assets/gif_data.gif";
 import Modal from "./Modal";
 import myGifUpload from "../../assets/EzPz_Upload.svg";
 import Slide from 'react-reveal/Slide';
-import { useScroll } from "react-spring";
-import { motion } from 'framer-motion';
 
 import { Mermaid } from 'mdx-mermaid/Mermaid';
 import { authAxios } from "../../axios";
@@ -135,6 +134,8 @@ const [TypingTextState, setTypingTextState]= useState("")
   const [historY, setHistorY] = useState(0);
   const [accessToken, setAccessToken] = useState(0);
   const [summryLoading, setSummryLoading] = useState(false);
+  const [animateTextStop, setAnimateTextStop] = useState(false);
+  const [standAnimation, setStandAnimation] = useState(false);
   console.log(scrollY)
   console.log(initialY)
   const handleScroll = () => {
@@ -242,16 +243,18 @@ const [TypingTextState, setTypingTextState]= useState("")
     }, 1000); // Check if messageContainerRef is not null
   }
   const handleTechAndDiagram = (action, value) => {
+    setAnimateTextStop(false)
     setHistorY(0)
     setInitialYY(0)
     setLines('')
+    setMermaidCode('')
     if(trackerList.length===0){
       setTrackerList([value])
     }else{
       if(value.content?.text){
         if (trackerList.find(item => item.content.text === value.content.text)) {
           // Handle case where value.content.text is not unique
-          alert('Duplicate text. Do not add to trackerList.');
+          console.log('Duplicate text. Do not add to trackerList.');
         } else {
           setTrackerList([...trackerList, value]);
         }
@@ -347,15 +350,17 @@ const [TypingTextState, setTypingTextState]= useState("")
   };
 
   const handleChat = (message) => {
+    setAnimateTextStop(false)
     if(searchHighlight){
       setSearchHighlight('')
     }
+    setMermaidCode('')
     const trimmedValue = message.trim();
     if (trimmedValue === '' || trimmedValue === '"' ||trimmedValue === '" "' ||trimmedValue === '""'  ) {
       message = ''; // Clear the input field
       alert("Invalid input! Please enter valid text.");
     } else{
-setLines('|')
+setLines('  ')
     if(lastTeachHistory?.user_highlight){
       setThread([
         ...Thread,
@@ -555,7 +560,8 @@ setLines('|')
       setThread(threadHistory[foundIndex])
       const len= threadHistory[foundIndex].length
       setLines(threadHistory[foundIndex][len-1]?.aires)
-      setMermaidCode(threadHistory[foundIndex][len-1]?.mermaidJSCode)
+      console.log(threadHistory[foundIndex][len-1]?.mermaidJSCode)
+      setMermaidCode(threadHistory[foundIndex][len-1]?.diagram)
       setDropDownData(threadHistory[foundIndex][len-1]?.dropDownData)
       setShowFields(true)
       setAskedQuestion(threadHistory[foundIndex][len-1]?.title)
@@ -568,6 +574,31 @@ setLines('|')
   }
   console.log(console.log(lastTeachHistory))
   console.log(Thread)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        console.log('Tab is hidden');
+      } else {
+        setAnimateTextStop(true)
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, []);
+  const handleMouseEnterEyes = () => {
+    setStandAnimation(true);
+    // Add your logic for onMouseEnter here
+  };
+
+  const handleMouseLeaveEyes = () => {
+    setStandAnimation(false);
+    // Add your logic for onMouseLeave here
+  };
+
   return (
     <div className={styles.main_div} id="slider-container">
       <div className={styles.sections_container}>
@@ -744,6 +775,7 @@ setLines('|')
                         <p className={styles.question} style={{textAlign:'end', width:"86%"}}>{data?.title}</p>
                         </div>
                         {data?.diagram !==""? (
+                        <div style={{display:'flex', justifyContent:'center',alignItems:'center',width:'100%'}}>
                           <div className={styles.mermaidData}   onClick={e=>{handleOpenModal(data?.diagram)}}>
                             <MermaidChatMessage
                             key={data?.diagram}
@@ -751,6 +783,7 @@ setLines('|')
                             
 
                             />
+                        </div>
                           </div>
                         ) : null}
                         <p className={styles.typing}>{data?.aires}</p>
@@ -763,11 +796,13 @@ setLines('|')
                       {lines || searchHighlight? (
                         <div className={styles.childDivTypist}>
                             {mermaidCode ? (
+                                <div style={{display:'flex', justifyContent:'center',alignItems:'center',width:'100%'}}>
                           <div className={styles.mermaidData}  onClick={e=>{handleOpenModal(mermaidCode)}}>
                               <Mermaid
                                 chart={mermaidCode}
                                
                               />
+                          </div>
                           </div>
                             ) : null}
                           <Slide bottom>
@@ -781,21 +816,19 @@ setLines('|')
   </>
                             </Slide>
                           <div className={styles.fade_in_paragraph}>
-                            <span className={styles.fade_in_line}>
-                              <Reveal effect="fadeIn">
+                          {searchHighlight || animateTextStop?<p className={styles.typing}>{lines}</p>:  <span className={styles.fade_in_line}>
                                 <Typist
                                   key={typingKey}
-                                  avgTypingDelay={10}
-                                  cursor={{ hideWhenDone: true }}
+                                  avgTypingDelay={5}
+                                  cursor={{ hideWhenDone: true,show: true, }}
                                   className={styles.typing}
                                   onTypingDone={handleTypingDone}
-                                  onLineTyped={scrollToBottom}
+
                                 >
                                   {lines}
                                 </Typist>
-                              </Reveal>
                               <br />
-                            </span>
+                            </span>}
                           </div>
                           <div
                             style={{
@@ -902,11 +935,19 @@ setLines('|')
               />
             </div>
             {/* </Reveal> */}
-            <div
+            <div onMouseEnter={handleMouseEnterEyes} onMouseLeave={handleMouseLeaveEyes}>
+          {!standAnimation? <div
               className={styles.character_img}
               style={{ display: lines || Thread.length>0 || threadHistory.length>0 ? "block" : "none" }}
             >
               <EyesCom />
+            </div>: <div
+              className={styles.character_img}
+              style={{ display: lines || Thread.length>0 || threadHistory.length>0 ? "block" : "none" }}
+            >
+              <EyesCom2 />
+            </div>} 
+           
             </div>
           </>
         )}

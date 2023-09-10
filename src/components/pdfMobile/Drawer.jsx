@@ -355,11 +355,11 @@ export default function TemporaryDrawer({
                           </>
                         </Slide>
                         <div className={styles.fade_in_paragraph}>
-                          <span className={styles.fade_in_line} ref={typistRef}>
-                            <Reveal effect="fadeIn">
+                        {searchHighlight?<p className={styles.typing}>{lines}</p>: <span className={styles.fade_in_line} ref={typistRef}>
                               <Typist
                                 key={typingKey}
-                                avgTypingDelay={20}
+
+                                avgTypingDelay={5}
                                 onCharacterTyped={handleLinedChange}
                                 cursor={{ hideWhenDone: true }}
                                 className={styles.typing}
@@ -367,9 +367,8 @@ export default function TemporaryDrawer({
                               >
                                 {lines}
                               </Typist>
-                            </Reveal>
                             <br />
-                          </span>
+                          </span>}
                         </div>
                         <div
                           style={{
@@ -589,10 +588,9 @@ export default function TemporaryDrawer({
                         </Slide>
                         <div className={styles.fade_in_paragraph}>
                           <span className={styles.fade_in_line}>
-                            <Reveal effect="fadeIn">
                               <Typist
                                 key={typingKey}
-                                avgTypingDelay={20}
+                                avgTypingDelay={5}
                                 onCharacterTyped={handleLinedChange}
                                 cursor={{ hideWhenDone: true }}
                                 className={styles.typing}
@@ -600,7 +598,6 @@ export default function TemporaryDrawer({
                               >
                                 {lines}
                               </Typist>
-                            </Reveal>
                             <br />
                           </span>
                         </div>

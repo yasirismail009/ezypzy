@@ -88,7 +88,7 @@ margin-top: 51px;
 .btn{
   display: inline-flex;
 margin-top: 15px;
-height: 70px;
+height: 40px;
 padding: 20px 70px;
 flex-direction: column;
 align-items: center;
@@ -218,6 +218,7 @@ line-height: 34px;
   line-height: normal;
   cursor: pointer;
   margin: 10px 0;
+  background-color:#FAF5EA ;
 }
 .features_option_parent{
   display: flex;
@@ -234,6 +235,7 @@ line-height: 34px;
   line-height: normal;
   cursor: pointer;
   margin: 10px 0;
+  background-color:#FAF5EA ;
 }
 .feature_option_main:hover{
   color: #F96033;
@@ -318,7 +320,7 @@ margin: 0;
   .btn{
   margin-top: 39px;
   padding: 13px 85px;
-  height: 60px;
+  height: 40px;
   }
   .story_div {
     margin: 0;
